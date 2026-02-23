@@ -1,5 +1,6 @@
 @extends('common')
 @section('content')
+@section('hide_footer', true)
 
     <div class="container custom-login">
         <div class="glass-card">
