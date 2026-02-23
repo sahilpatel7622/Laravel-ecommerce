@@ -16,7 +16,7 @@ class products extends Controller
     {
         $data = productsmodel::all();
         $trending = trendingmodel::inRandomOrder()->take(8)->get();
-        return view('dashboard',compact('data', 'trending'));
+        return view('dashboard', compact('data', 'trending'));
     }
 
     function about()
@@ -27,41 +27,42 @@ class products extends Controller
     function detail($id)
     {
         $data = productsmodel::find($id);
-        return view('detail',compact('data'));
+        return view('detail', compact('data'));
     }
 
     function search(Request $request)
     {
-        $data = productsmodel::where('name','like','%'.$request->input('query').'%')->get();
-        $data = productsmodel::where('category','like','%'.$request->input('query').'%')->get();
-        return view('search',compact('data'));
+        $query = $request->input('query');
+        $data = productsmodel::where('name', 'like', '%' . $query . '%')
+            ->orWhere('category', 'like', '%' . $query . '%')
+            ->get();
+        return view('search', compact('data'));
     }
 
     function addToCart(Request $request)
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             $cart = new cartmodel;
             $cart->user_id = Auth::id();
             $cart->product_id = $request->product_id;
             $cart->save();
             return redirect('/dashboard');
-        }
-        else{
+        } else {
             return redirect('/login');
         }
     }
 
     function buyNow(Request $request)
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             return redirect('/order?buy_now=' . $request->product_id);
-        }
-        else{
+        } else {
             return redirect('/login');
         }
     }
-    
-    static function cartItem(){
+
+    static function cartItem()
+    {
         $userId = Auth::id();
         return cartmodel::where('user_id', $userId)->count();
     }
@@ -86,7 +87,7 @@ class products extends Controller
                 $products[$existingKey]->all_cart_ids .= ',' . $item->cart_id;
             } else {
                 $item->quantity = 1;
-                $item->all_cart_ids = (string)$item->cart_id;
+                $item->all_cart_ids = (string) $item->cart_id;
                 $products->push($item);
             }
         }
@@ -111,7 +112,7 @@ class products extends Controller
     function order(Request $request)
     {
         $userId = Auth::id();
-        
+
         if ($request->has('buy_now')) {
             $orders = DB::table('products')->where('id', $request->query('buy_now'))->get();
         } else {
@@ -128,7 +129,7 @@ class products extends Controller
     function orderplace(Request $request)
     {
         $userId = Auth::id();
-        
+
         if ($request->has('buy_now') && $request->input('buy_now')) {
             $order = new ordermodel;
             $order->user_id = $userId;
@@ -187,5 +188,5 @@ class products extends Controller
         }
         return redirect('/myorders')->with('success', 'Order cancelled successfully!');
     }
-    
+
 }
