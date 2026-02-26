@@ -47,11 +47,9 @@ class products extends Controller
                                 ->first();
 
             if ($cartItem) {
-                // If product already in cart, increment quantity
                 $cartItem->quantity += $request->input('quantity', 1);
                 $cartItem->save();
             } else {
-                // Add new product to cart
                 $cart = new cartmodel;
                 $cart->user_id = Auth::id();
                 $cart->product_id = $request->product_id;
@@ -67,7 +65,8 @@ class products extends Controller
     function buyNow(Request $request)
     {
         if (Auth::check()) {
-            return redirect('/order?buy_now=' . $request->product_id);
+            $qty = $request->input('quantity', 1);
+            return redirect('/order?buy_now=' . $request->product_id . '&qty=' . $qty);
         } else {
             return redirect('/login');
         }
@@ -127,6 +126,10 @@ class products extends Controller
 
         if ($request->has('buy_now')) {
             $orders = DB::table('products')->where('id', $request->query('buy_now'))->get();
+            // Since it's from buy now, attach the requested quantity
+            if ($orders->isNotEmpty()) {
+                $orders->first()->quantity = $request->query('qty', 1);
+            }
         } else {
             $orders = DB::table('add cart')
                 ->join('products', 'add cart.product_id', '=', 'products.id')
