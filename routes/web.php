@@ -48,6 +48,7 @@ Route::post('/buynow',[products::class,'buyNow'])->name('buyNow');
 Route::get('/cartlist',[products::class,'cartlist'])->name('cartlist');
 
 Route::get('/removecart/{id}',[products::class,'removeCart'])->name('removeCart');
+Route::get('/updatecart/{id}/{quantity}',[products::class,'updateCart'])->name('updateCart');
 
 route::get('/products',[products::class,'products'])->name('products');
 

@@ -42,10 +42,22 @@ class products extends Controller
     function addToCart(Request $request)
     {
         if (Auth::check()) {
-            $cart = new cartmodel;
-            $cart->user_id = Auth::id();
-            $cart->product_id = $request->product_id;
-            $cart->save();
+            $cartItem = cartmodel::where('user_id', Auth::id())
+                                ->where('product_id', $request->product_id)
+                                ->first();
+
+            if ($cartItem) {
+                // If product already in cart, increment quantity
+                $cartItem->quantity += $request->input('quantity', 1);
+                $cartItem->save();
+            } else {
+                // Add new product to cart
+                $cart = new cartmodel;
+                $cart->user_id = Auth::id();
+                $cart->product_id = $request->product_id;
+                $cart->quantity = $request->input('quantity', 1);
+                $cart->save();
+            }
             return redirect('/dashboard');
         } else {
             return redirect('/login');
@@ -70,27 +82,11 @@ class products extends Controller
     function cartlist()
     {
         $userId = Auth::id();
-        $cartItems = DB::table('add cart')
+        $products = DB::table('add cart')
             ->join('products', 'add cart.product_id', '=', 'products.id')
             ->where('add cart.user_id', $userId)
-            ->select('products.*', 'add cart.id as cart_id')
+            ->select('products.*', 'add cart.id as cart_id', 'add cart.quantity')
             ->get();
-
-        $products = collect();
-        foreach ($cartItems as $item) {
-            $existingKey = $products->search(function ($p) use ($item) {
-                return $p->id === $item->id;
-            });
-
-            if ($existingKey !== false) {
-                $products[$existingKey]->quantity += 1;
-                $products[$existingKey]->all_cart_ids .= ',' . $item->cart_id;
-            } else {
-                $item->quantity = 1;
-                $item->all_cart_ids = (string) $item->cart_id;
-                $products->push($item);
-            }
-        }
 
         return view('cartlist', compact('products'));
     }
@@ -100,6 +96,22 @@ class products extends Controller
         $ids = explode(',', $id);
         cartmodel::destroy($ids);
         return redirect('/cartlist');
+    }
+
+    function updateCart($id, $quantity)
+    {
+        if (Auth::check()) {
+            $cartItem = cartmodel::where('user_id', Auth::id())
+                                ->where('id', $id)
+                                ->first();
+            if ($cartItem && $quantity > 0) {
+                $cartItem->quantity = $quantity;
+                $cartItem->save();
+            }
+            return redirect('/cartlist');
+        } else {
+            return redirect('/login');
+        }
     }
 
     function products()
@@ -119,7 +131,7 @@ class products extends Controller
             $orders = DB::table('add cart')
                 ->join('products', 'add cart.product_id', '=', 'products.id')
                 ->where('add cart.user_id', $userId)
-                ->select('products.*')
+                ->select('products.*', 'add cart.quantity')
                 ->get();
         }
 

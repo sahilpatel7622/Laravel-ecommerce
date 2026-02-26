@@ -12,7 +12,8 @@
                 $totalPrice = 0; 
                 foreach ($orders as $item) {
                     $price = (float) str_replace(['₹', '$', '€', '£', ',', ' '], '', $item->price);
-                    $totalPrice += $price; 
+                    $qty = isset($item->quantity) ? $item->quantity : 1;
+                    $totalPrice += ($price * $qty); 
                 }
                 $tax = $totalPrice * 0.005; // 0.5% tax
                 $delivery = $totalPrice > 0 ? 99 : 0; // Fixed delivery charge

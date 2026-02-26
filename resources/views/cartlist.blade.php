@@ -45,14 +45,22 @@
                                                 {{ $item->description }}
                                             </p>
                                         </td>
-                                        <td class="text-center fw-bold text-dark fs-5">
-                                            {{ $item->quantity }}
+                                        <td class="text-center">
+                                            <div class="input-group input-group-sm mx-auto" style="width: 110px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-radius: 6px; overflow: hidden;">
+                                                <button class="btn btn-light border-secondary-subtle px-2" type="button" onclick="updateCartQty({{ $item->cart_id }}, {{ $item->quantity - 1 }})" {{ $item->quantity <= 1 ? 'disabled' : '' }}>
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <input type="text" class="form-control text-center fw-bold border-secondary-subtle bg-white px-0" value="{{ $item->quantity }}" readonly>
+                                                <button class="btn btn-light border-secondary-subtle px-2" type="button" onclick="updateCartQty({{ $item->cart_id }}, {{ $item->quantity + 1 }})">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                         <td class="text-center fw-bold text-dark fs-5">
                                             ₹{{ number_format($itemTotal, 2) }}
                                         </td>
                                         <td class="text-center">
-                                            <a href="/removecart/{{ $item->all_cart_ids }}" class="btn btn-outline-danger btn-sm">
+                                            <a href="/removecart/{{ $item->cart_id }}" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash"></i> Remove
                                             </a>
                                         </td>
@@ -63,6 +71,14 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                function updateCartQty(cartId, newQty) {
+                    if (newQty > 0) {
+                        window.location.href = `/updatecart/${cartId}/${newQty}`;
+                    }
+                }
+            </script>
 
             @php
                 $totalAmount = $totalPrice; // No tax or delivery charge
