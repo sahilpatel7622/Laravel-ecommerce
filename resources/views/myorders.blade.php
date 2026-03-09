@@ -118,6 +118,7 @@
                                 <th scope="col" style="width: 100px;">Item</th>
                                 <th scope="col">Product Details</th>
                                 <th scope="col">Shipping Info</th>
+                                <th scope="col">Payment Status</th>
                                 <th scope="col" class="text-center">Status</th>
                                 <th scope="col" class="text-center">Order Placed</th>
                                 <th scope="col" class="text-end">Total Price</th>
@@ -141,11 +142,9 @@
                                     <td>
                                         <div class="small text-muted mb-1"><i class="bi bi-geo-alt-fill me-1"></i> {{ $order->address }}</div>
                                         <div class="small text-muted mb-1"><i class="bi bi-credit-card-fill me-1"></i> Paid via: <span class="text-uppercase fw-semibold">{{ $order->payment_method }}</span></div>
-                                        @if(in_array(strtolower($order->status), ['delivered', 'done']) || strtolower($order->payment_method) != 'cash')
-                                            <div class="small text-success fw-semibold mt-1"><i class="bi bi-check2-circle me-1"></i> Payment Confirmed</div>
-                                        @else
-                                            <div class="small text-warning fw-semibold mt-1"><i class="bi bi-hourglass-split me-1"></i> Payment Pending</div>
-                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted"><b>{{ ucfirst($order->payment_status) }}</b></div>
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex flex-column align-items-center justify-content-center" style="gap: 8px;">

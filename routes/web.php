@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\products;
 
+use App\Http\Controllers\Admin\Admin;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -62,3 +64,34 @@ route::post('/orderplace',[products::class,'orderplace'])->name('orderplace');
 route::get('/myorders',[products::class,'myorders'])->name('myorders');
 
 Route::get('/cancelorder/{id}',[products::class,'cancelOrder'])->name('cancelOrder');
+
+
+// Admin routes
+Route::get('/admin', function () {
+    return redirect()->route('admin.login');
+});
+
+Route::get('/admin/login',[Admin::class,'login'])->name('admin.login');
+Route::post('/admin/login',[Admin::class,'login_store'])->name('admin.login_store');
+
+Route::middleware(['admin.auth'])->group(function () {
+    Route::get('/admin/dashboard',[Admin::class,'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/users', [Admin::class, 'users'])->name('admin.users');
+    Route::get('/admin/users/delete/{id}', [Admin::class, 'deleteUser'])->name('admin.users.delete');
+    Route::get('/admin/products', [Admin::class, 'products'])->name('admin.products');
+    Route::get('/admin/products/add', [Admin::class, 'addProduct'])->name('admin.products.add');
+    Route::post('/admin/products/add', [Admin::class, 'storeProduct'])->name('admin.products.store');
+    Route::get('/admin/products/edit/{id}', [Admin::class, 'editProduct'])->name('admin.products.edit');
+    Route::post('/admin/products/edit/{id}', [Admin::class, 'updateProduct'])->name('admin.products.update');
+    Route::get('/admin/products/delete/{id}', [Admin::class, 'deleteProduct'])->name('admin.products.delete');
+    
+    // Orders
+    Route::get('/admin/orders', [Admin::class, 'orders'])->name('admin.orders');
+    Route::post('/admin/orders/update-status/{id}', [Admin::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
+
+    // Payments
+    Route::get('/admin/payments', [Admin::class, 'payments'])->name('admin.payments');
+    Route::post('/admin/payments/update-status/{id}', [Admin::class, 'updatePaymentStatus'])->name('admin.payments.updateStatus');
+
+    Route::get('/admin/logout',[Admin::class,'logout'])->name('admin.logout');
+});

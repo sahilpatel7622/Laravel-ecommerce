@@ -126,7 +126,6 @@ class products extends Controller
 
         if ($request->has('buy_now')) {
             $orders = DB::table('products')->where('id', $request->query('buy_now'))->get();
-            // Since it's from buy now, attach the requested quantity
             if ($orders->isNotEmpty()) {
                 $orders->first()->quantity = $request->query('qty', 1);
             }
@@ -149,13 +148,14 @@ class products extends Controller
             $order = new ordermodel;
             $order->user_id = $userId;
             $order->product_id = $request->input('buy_now');
+            $order->amount = $request->input('total_amount');
             $order->address = $request->address . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->zip;
             $order->payment_method = $request->payment;
             $order->status = 'Pending';
             if (strtolower($request->payment) == 'cash') {
                 $order->payment_status = 'Pending';
             } else {
-                $order->payment_status = 'Done';
+                $order->payment_status = 'Completed';
             }
             $order->save();
         } else {
@@ -165,6 +165,7 @@ class products extends Controller
                 $order = new ordermodel;
                 $order->user_id = $userId;
                 $order->product_id = $cart->product_id;
+                $order->amount = $request->input('total_amount');
                 $order->address = $request->address . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->zip;
                 $order->payment_method = $request->payment;
                 $order->status = 'Pending';

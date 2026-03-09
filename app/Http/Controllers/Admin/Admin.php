@@ -1,0 +1,208 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Admin_usermodel;
+use App\Models\usermodel;
+use App\Models\ordermodel;
+use App\Models\productsmodel;
+use Illuminate\Support\Facades\Auth;
+
+class Admin extends Controller
+{
+    function login(Request $request)
+    {
+        $request->session()->forget(['admin_logged_in', 'admin_id']);
+        return view('Admin.login');
+    }
+    public function login_store(Request $request)
+    {
+        $admin = Admin_usermodel::where('email', $request->email)->first();
+
+        if($admin && $admin->password === $request->password){
+            $request->session()->put('admin_logged_in', true);
+            $request->session()->put('admin_id', $admin->id);
+            return redirect()->route('admin.dashboard');
+        }
+        return back()->withErrors(['email'=>'Invalid login details']);
+    }
+    function dashboard()
+    {
+        $recentOrders = ordermodel::with('product')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+            
+        $totalOrders = ordermodel::count();
+        $totalProducts = productsmodel::count();
+        $totalUsers = usermodel::count();
+        $totalCategories = productsmodel::distinct('category')->count('category');
+        
+        $totalPayments = 0;
+        $allOrders = ordermodel::with('product')->get();
+        foreach ($allOrders as $order) {
+            if ($order->amount) {
+                $totalPayments += (float) $order->amount;
+            } elseif ($order->product) {
+                $price = (float) str_replace(['₹', '$', '€', '£', ',', ' '], '', $order->product->price);
+                $totalPayments += $price;
+            }
+        }
+            
+        $totalFlavours = 0; // Placeholder
+        $totalFeedback = 0; // Placeholder
+            
+        return view('Admin.dashboard', compact(
+            'recentOrders', 'totalOrders', 'totalProducts', 'totalUsers', 
+            'totalCategories', 'totalPayments', 'totalFlavours', 'totalFeedback'
+        ));
+    }
+
+    public function users(Request $request)
+    {
+        $query = usermodel::query();
+
+        if ($request->has('search') && $request->input('search') != '') {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('number', 'LIKE', "%{$search}%");
+        }
+
+        $users = $query->orderBy('created_at', 'desc')->get();
+        return view('Admin.users', compact('users'));
+    }
+
+    public function deleteUser($id)
+    {
+        $user = usermodel::find($id);
+        if ($user) {
+            $user->delete();
+        }
+        return redirect()->back();
+    }
+
+    public function products(Request $request)
+    {
+        $query = productsmodel::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('category', 'LIKE', "%{$search}%")
+                  ->orWhere('price', 'LIKE', "%{$search}%");
+        }
+
+        $products = $query->get();
+        return view('Admin.products', compact('products'));
+    }
+
+    public function addProduct()
+    {
+        return view('Admin.add-product');
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required',
+            'category' => 'required|string|max:255',
+            'description' => 'required|string',
+            'gallery' => 'required|string',
+        ]);
+
+        $product = new productsmodel();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->category = $request->category;
+        $product->description = $request->description;
+        $product->gallery = $request->gallery;
+        $product->save();
+
+        return redirect()->route('admin.products')->with('success', 'Product added successfully!');
+    }
+
+    public function editProduct($id)
+    {
+        $product = productsmodel::findOrFail($id);
+        return view('Admin.edit-product', compact('product'));
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $product = productsmodel::findOrFail($id);
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required',
+            'category' => 'required|string|max:255',
+            'description' => 'required|string',
+            'gallery' => 'required|string',
+        ]);
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->category = $request->category;
+        $product->description = $request->description;
+        $product->gallery = $request->gallery;
+        $product->save();
+
+        return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = productsmodel::find($id);
+        if ($product) {
+            $product->delete();
+        }
+        return redirect()->back()->with('success', 'Product deleted successfully!');
+    }
+
+    public function orders()
+    {
+        $orders = ordermodel::with(['user', 'product'])->orderBy('created_at', 'desc')->get();
+        return view('Admin.orders', compact('orders'));
+    }
+
+    public function updateOrderStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|string|in:Pending,Processing,Shipped,Delivered,Cancelled,pending,processing,shipped,delivered,cancelled'
+        ]);
+
+        $order = ordermodel::findOrFail($id);
+        $order->status = ucfirst(strtolower($request->status));
+        $order->save();
+
+        return redirect()->back()->with('success', 'Order status updated to ' . $order->status . '.');
+    }
+
+    public function payments()
+    {
+        $orders = ordermodel::with(['user', 'product'])->orderBy('created_at', 'desc')->get();
+        return view('Admin.payments', compact('orders'));
+    }
+
+    public function updatePaymentStatus(Request $request, $id)
+    {
+        $request->validate([
+            'payment_status' => 'required|string|in:Pending,Completed,Failed,Refunded,pending,completed,failed,refunded'
+        ]);
+
+        $order = ordermodel::findOrFail($id);
+        $order->payment_status = strtolower($request->payment_status);
+        $order->save();
+
+        return redirect()->back()->with('success', 'Payment status updated to ' . ucfirst($order->payment_status) . '.');
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget(['admin_logged_in', 'admin_id']);
+        return redirect()->route('admin.login');
+    }
+}
