@@ -1,5 +1,5 @@
 @extends('Admin.layout')
-@section('title', 'Manage Orders')
+@section('title', 'Manage Payments')
 
 @section('content')
 <div class="mb-8 flex items-center justify-between">
