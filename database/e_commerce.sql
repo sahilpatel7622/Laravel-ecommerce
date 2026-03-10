@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2026 at 06:16 AM
+-- Generation Time: Mar 10, 2026 at 10:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,6 +31,7 @@ CREATE TABLE `add cart` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `product_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -39,10 +40,51 @@ CREATE TABLE `add cart` (
 -- Dumping data for table `add cart`
 --
 
-INSERT INTO `add cart` (`id`, `product_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(2, 1, 3, '2026-02-20 08:14:20', '2026-02-20 08:14:20'),
-(55, 1, 7, '2026-02-21 23:39:26', '2026-02-21 23:39:26'),
-(56, 1, 7, '2026-02-21 23:39:30', '2026-02-21 23:39:30');
+INSERT INTO `add cart` (`id`, `product_id`, `user_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(5, 6, 1, 1, '2026-03-10 04:25:15', '2026-03-10 04:25:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `name`, `email`, `password`) VALUES
+(1, 'Dhruvi', 'dhruvi@gmail.com', '123456');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'TV', 1, '2026-03-10 04:03:11', '2026-03-10 04:03:11'),
+(3, 'Mobile', 1, '2026-03-10 04:03:46', '2026-03-10 04:04:10'),
+(4, 'Laptop', 0, '2026-03-10 04:04:01', '2026-03-10 04:04:01');
 
 -- --------------------------------------------------------
 
@@ -69,7 +111,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2026_02_21_060742_order', 4),
 (7, '2026_02_21_161508_trending', 5),
 (8, '2026_02_21_164723_trending', 6),
-(9, '2026_02_21_164950_trending', 7);
+(9, '2026_02_21_164950_trending', 7),
+(10, '2026_02_26_090458_add_cart', 8),
+(11, '2026_02_28_075536_admin', 9),
+(13, '2026_03_10_092822_create_categories_table', 10);
 
 -- --------------------------------------------------------
 
@@ -81,6 +126,7 @@ CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `amount` varchar(255) DEFAULT NULL,
   `address` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'pending',
   `payment_method` varchar(255) NOT NULL,
@@ -93,12 +139,10 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `product_id`, `address`, `status`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
-(25, 1, 9, '101, Arjun Apartment, Thaltej, ahmedabad, Gujarat - 826345', 'delivered', 'cash', 'Pending', '2026-02-21 08:27:20', '2026-02-21 08:27:20'),
-(27, 1, 7, '101, ahmedabad, Gujarat - 867412', 'Cancelled', 'card', 'Done', '2026-02-21 08:50:20', '2026-02-21 23:44:58'),
-(28, 1, 2, '102, amreli, Gujarat - 365550', 'Pending', 'cash', 'Pending', '2026-02-21 08:50:45', '2026-02-21 08:50:45'),
-(30, 1, 3, '102, amreli, Gujarat - 365550', 'delivered', 'cash', 'Pending', '2026-02-21 08:50:45', '2026-02-21 08:50:45'),
-(31, 1, 3, '102, amreli, Gujarat - 365550', 'Cancelled', 'upi', 'Pending', '2026-02-21 08:50:45', '2026-02-21 23:44:51');
+INSERT INTO `orders` (`id`, `user_id`, `product_id`, `amount`, `address`, `status`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
+(38, 1, 11, '17641.3803', '123, ahmedabad, Gujarat - 380000', 'Pending', 'cash', 'pending', '2026-03-09 00:20:36', '2026-03-10 03:54:58'),
+(39, 1, 10, '34215.78', 'amreli, amreli, gujarat - 365550', 'Delivered', 'upi', 'completed', '2026-03-09 00:24:06', '2026-03-10 03:55:15'),
+(40, 8, 2, '155974.545', '01, ahmedabad, GUJARAT - 380059', 'Pending', 'card', 'refunded', '2026-03-09 00:45:54', '2026-03-10 03:54:04');
 
 -- --------------------------------------------------------
 
@@ -141,17 +185,17 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `category`, `gallery`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Redmi Note 15', '₹30,999', 'Mobiles', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', 'REDMI Note 15 Pro 5G (Silver Ash 8GB+256GB) | 200MasterPixel OIS Camera | Dimensity 7400-Ultra | 17.3cm CrystalRes AMOLED Screen', NULL, NULL),
-(2, 'Apple iPhone 16 Pro', '₹1,59,900', 'Mobiles', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', 'iPhone 16 Pro Max 1 TB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life.\r\n', NULL, NULL),
-(3, 'Samsung Galaxy S23 Ultra', '₹1,09,999', 'Mobiles', 'https://m.media-amazon.com/images/I/71qGismu6NL._SX679_.jpg', 'Samsung Galaxy S23 FE 5G (Mint, 8GB, 128GB Storage)', NULL, NULL),
-(4, 'OnePlus 15R 5G', '₹49,999', 'Mobiles', 'https://m.media-amazon.com/images/I/61AsNTuJ6mL._SX679_.jpg', 'The OnePlus 15R 5G is a mid-range smartphone that offers a range of features and specifications.', NULL, NULL),
-(5, 'Google Pixel 7 Pro', '₹34,999', 'Mobiles', 'https://m.media-amazon.com/images/I/51OFxuD1GgL._SX522_.jpg', 'Google Pixel 7 Pro (Obsidian, 128 GB) (12 GB RAM)', NULL, NULL),
+(1, 'Redmi Note 15', '₹30,999', 'Mobile', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', 'REDMI Note 15 Pro 5G (Silver Ash 8GB+256GB) | 200MasterPixel OIS Camera | Dimensity 7400-Ultra | 17.3cm CrystalRes AMOLED Screen', NULL, '2026-03-07 06:56:10'),
+(2, 'Apple iPhone 16 Pro', '₹1,59,900', 'Mobile', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', 'iPhone 16 Pro Max 1 TB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life.\r\n', NULL, NULL),
+(3, 'Samsung Galaxy S23 Ultra', '₹1,09,999', 'Mobile', 'https://m.media-amazon.com/images/I/71qGismu6NL._SX679_.jpg', 'Samsung Galaxy S23 FE 5G (Mint, 8GB, 128GB Storage)', NULL, NULL),
+(4, 'OnePlus 15R 5G', '₹49,999', 'Mobile', 'https://m.media-amazon.com/images/I/61AsNTuJ6mL._SX679_.jpg', 'The OnePlus 15R 5G is a mid-range smartphone that offers a range of features and specifications.', NULL, NULL),
+(5, 'Google Pixel 7 Pro', '₹34,999', 'Mobile', 'https://m.media-amazon.com/images/I/51OFxuD1GgL._SX522_.jpg', 'Google Pixel 7 Pro (Obsidian, 128 GB) (12 GB RAM)', NULL, NULL),
 (6, 'LG', '₹70,000', 'TV', 'https://m.media-amazon.com/images/I/71yz55f1VlL._SX522_.jpg', 'LG 139 cm (55 Inches) UR7500 AI Series 4K Ultra HD (3840 x 2160) LED Smart TV (Black) (2020 Model)', NULL, NULL),
 (7, 'Samsung', '₹80,000', 'TV', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', 'Samsung 139 cm (55 inches) QN90C Neo QLED 4K Ultra HD Smart TV (Black)', NULL, NULL),
 (8, 'Sony', '₹63,000', 'TV', 'https://m.media-amazon.com/images/I/81Vs1ZXn43L._SX522_.jpg', 'Sony 139 cm (55 inches) X80K Series 4K Ultra HD Smart LED Google TV XR55X80K', NULL, NULL),
 (9, 'Toshiba', '₹30,000', 'TV', 'https://m.media-amazon.com/images/I/9121McCSSxL._SX522_.jpg', 'Toshiba 139 cm (55 inches) C350NP Series 4K Ultra HD Smart LED Google TV 55C350NP (Black)', NULL, NULL),
 (10, 'TCL TV', '₹35,000', 'TV', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', 'TCL 139 cm (55 inches) 4K UHD Smart QLED Google TV 55T6C (Black)', NULL, NULL),
-(11, 'iQOO Z10x 5G', '₹17,998 ', 'Mobiles', 'https://m.media-amazon.com/images/I/61oa+zoqwmL._SX679_.jpg', 'iQOO Z10x 5G (Ultramarine, 8GB RAM, 256GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Durability', NULL, NULL),
+(11, 'iQOO Z10x 5G', '₹17,998 ', 'Mobile', 'https://m.media-amazon.com/images/I/61oa+zoqwmL._SX679_.jpg', 'iQOO Z10x 5G (Ultramarine, 8GB RAM, 256GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Durability', NULL, NULL),
 (12, 'Xiaomi', '₹29,999 ', 'TV', 'https://m.media-amazon.com/images/I/71mA83yc8xL._SX522_.jpg', 'Xiaomi 138 cm (55 inch) FX Ultra HD 4K Smart LED Fire TV L55MB-FIN\r\nWarranty Information: Enjoy 1 Year of Comprehensive Warranty', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -202,8 +246,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `number`, `email`, `password`, `Gender`, `created_at`, `updated_at`) VALUES
 (1, 'Dhruvi', '6359950829', 'dhruvi@gmail.com', '$2y$10$FSnb8Y8iyzjKwqxCEzLGRO1hjNS7KgWO8pjX05VN0IPSCMCvux0K.', 'Female', '2026-02-20 11:20:38', '2026-02-20 11:31:05'),
-(3, 'Sahil', '7622920559', 'sahil@gmail.com', '$2y$10$IJ6S9PwqS68ZYOu/C6jMN.RHdgmPgyPiw4MQ1gNCnWK0lKt3XMOU6', 'Male', '2026-02-20 11:25:38', '2026-02-20 11:26:47'),
-(7, 'Test User', '1234567890', 'testuser@example.com', '$2y$10$wrkA4x7SSmyojmYCOSOLTOpi.bgel/Js8owdY8H88q06DIXXtz3l2', '', '2026-02-21 23:35:28', '2026-02-21 23:35:28');
+(8, 'sahil', '7622920559', 'sahil@gmail.com', '$2y$10$0IEbV87otdT.ckLK1udpWuljRsK0TJ32ULvbUykPMCBmoLnIM94li', '', '2026-03-07 06:41:02', '2026-03-07 06:41:02');
 
 --
 -- Indexes for dumped tables
@@ -214,6 +257,20 @@ INSERT INTO `users` (`id`, `name`, `number`, `email`, `password`, `Gender`, `cre
 --
 ALTER TABLE `add cart`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `admin_email_unique` (`email`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `categories_name_unique` (`name`);
 
 --
 -- Indexes for table `migrations`
@@ -262,19 +319,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `add cart`
 --
 ALTER TABLE `add cart`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -286,7 +355,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `trending`
@@ -298,7 +367,7 @@ ALTER TABLE `trending`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
