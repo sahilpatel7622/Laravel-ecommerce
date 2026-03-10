@@ -78,27 +78,19 @@
 
                     <!-- Status Update Form -->
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST" class="flex items-center gap-2">
-                            @csrf
-                            <select name="status" class="block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md 
-                                {{ strtolower($order->status) == 'pending' ? 'text-yellow-700 bg-yellow-50 font-medium' : '' }}
-                                {{ strtolower($order->status) == 'processing' ? 'text-blue-700 bg-blue-50 font-medium' : '' }}
-                                {{ strtolower($order->status) == 'shipped' ? 'text-indigo-700 bg-indigo-50 font-medium' : '' }}
-                                {{ strtolower($order->status) == 'delivered' ? 'text-green-700 bg-green-50 font-medium' : '' }}
-                                {{ strtolower($order->status) == 'cancelled' ? 'text-red-700 bg-red-50 font-medium' : '' }}
-                            " onchange="this.form.submit()">
-                                <option value="Pending" {{ strtolower($order->status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <select data-id="{{ $order->id }}" class="order-status-select block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md 
+                            {{ strtolower($order->status) == 'pending' ? 'text-yellow-700 bg-yellow-50 font-medium' : '' }}
+                            {{ strtolower($order->status) == 'processing' ? 'text-blue-700 bg-blue-50 font-medium' : '' }}
+                            {{ strtolower($order->status) == 'shipped' ? 'text-indigo-700 bg-indigo-50 font-medium' : '' }}
+                            {{ strtolower($order->status) == 'delivered' ? 'text-green-700 bg-green-50 font-medium' : '' }}
+                            {{ strtolower($order->status) == 'cancelled' ? 'text-red-700 bg-red-50 font-medium' : '' }}
+                        ">
+                            <option value="Pending" {{ strtolower($order->status) == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="Processing" {{ strtolower($order->status) == 'processing' ? 'selected' : '' }}>Processing</option>
                                 <option value="Shipped" {{ strtolower($order->status) == 'shipped' ? 'selected' : '' }}>Shipped</option>
                                 <option value="Delivered" {{ strtolower($order->status) == 'delivered' ? 'selected' : '' }}>Delivered</option>
                                 <option value="Cancelled" {{ strtolower($order->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                            </select>
-                            
-                            <!-- Hidden submit button just in case JS fails -->
-                            <noscript>
-                                <button type="submit" class="bg-indigo-600 text-white px-2 py-1 rounded text-xs hover:bg-indigo-700">Go</button>
-                            </noscript>
-                        </form>
+                        </select>
                     </td>
 
                     <!-- Address -->
@@ -125,4 +117,65 @@
         </table>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('.order-status-select');
+    
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const orderId = this.getAttribute('data-id');
+            const newStatus = this.value;
+            const selectElement = this;
+            
+            selectElement.className = 'order-status-select block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md transition-colors';
+            
+            if(newStatus.toLowerCase() === 'pending') selectElement.classList.add('text-yellow-700', 'bg-yellow-50', 'font-medium');
+            else if(newStatus.toLowerCase() === 'processing') selectElement.classList.add('text-blue-700', 'bg-blue-50', 'font-medium');
+            else if(newStatus.toLowerCase() === 'shipped') selectElement.classList.add('text-indigo-700', 'bg-indigo-50', 'font-medium');
+            else if(newStatus.toLowerCase() === 'delivered') selectElement.classList.add('text-green-700', 'bg-green-50', 'font-medium');
+            else if(newStatus.toLowerCase() === 'cancelled') selectElement.classList.add('text-red-700', 'bg-red-50', 'font-medium');
+
+            fetch(`/admin/orders/update-status/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: data.message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed to update order status',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+        });
+    });
+});
+</script>
+@endpush
 @endsection

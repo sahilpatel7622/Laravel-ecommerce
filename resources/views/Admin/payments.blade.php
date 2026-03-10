@@ -68,25 +68,17 @@
 
                     <!-- Setup Payment Status Dropdown -->
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <form action="{{ route('admin.payments.updateStatus', $order->id) }}" method="POST" class="flex items-center gap-2">
-                            @csrf
-                            <select name="payment_status" class="block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md 
-                                {{ strtolower($order->payment_status) == 'pending' ? 'text-yellow-700 bg-yellow-50 font-medium' : '' }}
-                                {{ strtolower($order->payment_status) == 'completed' || strtolower($order->payment_status) == 'paid' || strtolower($order->payment_status) == 'done' ? 'text-green-700 bg-green-50 font-medium' : '' }}
-                                {{ strtolower($order->payment_status) == 'failed' ? 'text-red-700 bg-red-50 font-medium' : '' }}
-                                {{ strtolower($order->payment_status) == 'refunded' ? 'text-gray-700 bg-gray-100 font-medium' : '' }}
-                            " onchange="this.form.submit()">
-                                <option value="pending" {{ strtolower($order->payment_status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <select data-id="{{ $order->id }}" class="payment-status-select block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md 
+                            {{ strtolower($order->payment_status) == 'pending' ? 'text-yellow-700 bg-yellow-50 font-medium' : '' }}
+                            {{ strtolower($order->payment_status) == 'completed' || strtolower($order->payment_status) == 'paid' || strtolower($order->payment_status) == 'done' ? 'text-green-700 bg-green-50 font-medium' : '' }}
+                            {{ strtolower($order->payment_status) == 'failed' ? 'text-red-700 bg-red-50 font-medium' : '' }}
+                            {{ strtolower($order->payment_status) == 'refunded' ? 'text-gray-700 bg-gray-100 font-medium' : '' }}
+                        ">
+                            <option value="pending" {{ strtolower($order->payment_status) == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="completed" {{ (strtolower($order->payment_status) == 'completed' || strtolower($order->payment_status) == 'paid' || strtolower($order->payment_status) == 'done') ? 'selected' : '' }}>Completed</option>
                                 <option value="failed" {{ strtolower($order->payment_status) == 'failed' ? 'selected' : '' }}>Failed</option>
-                                <option value="refunded" {{ strtolower($order->payment_status) == 'refunded' ? 'selected' : '' }}>Refunded</option>
-                            </select>
-                            
-                            <!-- Hidden submit button just in case JS fails -->
-                            <noscript>
-                                <button type="submit" class="bg-indigo-600 text-white px-2 py-1 rounded text-xs hover:bg-indigo-700">Go</button>
-                            </noscript>
-                        </form>
+                            <option value="refunded" {{ strtolower($order->payment_status) == 'refunded' ? 'selected' : '' }}>Refunded</option>
+                        </select>
                     </td>
                 </tr>
                 @empty
@@ -107,4 +99,65 @@
     </div>
 </div>
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('.payment-status-select');
+    
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const orderId = this.getAttribute('data-id');
+            const newStatus = this.value;
+            const selectElement = this;
+            
+            // Provide immediate UI feedback by updating the classes based on selection
+            selectElement.className = 'payment-status-select block w-full pl-3 pr-10 py-1.5 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md transition-colors';
+            
+            const lowerStatus = newStatus.toLowerCase();
+            if(lowerStatus === 'pending') selectElement.classList.add('text-yellow-700', 'bg-yellow-50', 'font-medium');
+            else if(lowerStatus === 'completed' || lowerStatus === 'paid' || lowerStatus === 'done') selectElement.classList.add('text-green-700', 'bg-green-50', 'font-medium');
+            else if(lowerStatus === 'failed') selectElement.classList.add('text-red-700', 'bg-red-50', 'font-medium');
+            else if(lowerStatus === 'refunded') selectElement.classList.add('text-gray-700', 'bg-gray-100', 'font-medium');
+
+            fetch(`/admin/payments/update-status/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    payment_status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: data.message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed to update payment status',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            });
+        });
+    });
+});
+</script>
+@endpush
 @endsection

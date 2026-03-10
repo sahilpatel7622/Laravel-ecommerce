@@ -6,8 +6,8 @@
         <h1 class="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- Stats Cards First Row -->
+    <div class="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2 lg:grid-cols-4">
 
         <!-- Total Products (Purple) -->
         <div class="relative overflow-hidden bg-purple-600 rounded-xl shadow-sm transition-all hover:-translate-y-1">
@@ -93,7 +93,28 @@
                 <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
                 <path fill-rule="evenodd"
                     d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                    clip-rule="evenodd" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Stats Cards Second Row -->
+    <div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="relative overflow-hidden bg-orange-500 rounded-xl shadow-sm transition-all hover:-translate-y-1">
+            <div class="p-5 flex flex-col h-full bg-gradient-to-br from-orange-400 to-orange-600 relative z-10">
+                <h3 class="text-xs font-bold text-orange-100 uppercase tracking-wider mb-1">Total Categories</h3>
+                <div class="text-3xl font-extrabold text-white mb-4">{{ $totalCategories }}</div>
+                <a href="{{ route('admin.categories') }}"
+                    class="text-xs font-medium text-white hover:text-orange-100 mt-auto flex items-center justify-between border-t border-orange-400/30 pt-3">
+                    View Details
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+            <!-- Background Icon -->
+            <svg class="absolute -bottom-4 -right-4 w-24 h-24 text-orange-300/30 -rotate-12 transform" fill="currentColor"
+                viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
             </svg>
         </div>
     </div>
@@ -137,7 +158,7 @@
                                 {{ $order->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                                {{ $order->product ? $order->product->price : 'N/A' }}
+                                {{ $order->product ? number_format($order->amount, 0) : 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 

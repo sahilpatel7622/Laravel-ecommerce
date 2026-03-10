@@ -39,7 +39,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
+        <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-2">
@@ -68,13 +68,14 @@
                     </div>
                 </div>
 
-                <!-- Gallery Image URL -->
+                <!-- Gallery Image -->
                 <div class="sm:col-span-2">
-                    <label for="gallery" class="block text-sm font-medium text-gray-700">Image URL</label>
+                    <label for="gallery" class="block text-sm font-medium text-gray-700">Product Image (Optional)</label>
                     <div class="mt-1 flex items-center gap-4">
                         <img src="{{ filter_var($product->gallery, FILTER_VALIDATE_URL) ? $product->gallery : asset($product->gallery) }}" alt="Preview" class="h-12 w-12 object-cover rounded-md border border-gray-200">
-                        <input type="text" name="gallery" id="gallery" value="{{ old('gallery', $product->gallery) }}" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
+                        <input type="file" name="gallery" id="gallery" accept="image/*" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border bg-white">
                     </div>
+                    <p class="mt-2 text-sm text-gray-500">Leave blank to keep the current image.</p>
                 </div>
 
                 <!-- Description -->

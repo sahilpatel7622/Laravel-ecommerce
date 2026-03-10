@@ -93,5 +93,13 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/admin/payments', [Admin::class, 'payments'])->name('admin.payments');
     Route::post('/admin/payments/update-status/{id}', [Admin::class, 'updatePaymentStatus'])->name('admin.payments.updateStatus');
 
+    // Categories
+    Route::get('/admin/categories', [Admin::class, 'categories'])->name('admin.categories');
+    Route::get('/admin/categories/add', [Admin::class, 'addCategory'])->name('admin.categories.add');
+    Route::post('/admin/categories/add', [Admin::class, 'storeCategory'])->name('admin.categories.store');
+    Route::get('/admin/categories/edit/{id}', [Admin::class, 'editCategory'])->name('admin.categories.edit');
+    Route::post('/admin/categories/edit/{id}', [Admin::class, 'updateCategory'])->name('admin.categories.update');
+    Route::get('/admin/categories/delete/{id}', [Admin::class, 'deleteCategory'])->name('admin.categories.delete');
+
     Route::get('/admin/logout',[Admin::class,'logout'])->name('admin.logout');
 });

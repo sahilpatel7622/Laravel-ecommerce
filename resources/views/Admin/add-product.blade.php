@@ -39,7 +39,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.products.store') }}" method="POST">
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
             <div class="grid grid-cols-1 gap-y-6 gap-x-6 sm:grid-cols-2">
@@ -48,7 +48,7 @@
                 <div class="sm:col-span-2">
                     <label for="name" class="block text-sm font-medium text-gray-700">Product Name</label>
                     <div class="mt-1">
-                        <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="e.g. Apple iPhone 15 Pro Max" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
+                        <input type="text" name="name" id="name" placeholder="e.g. Apple iPhone 15 Pro Max" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
                 <div>
                     <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                     <div class="mt-1">
-                        <input type="text" name="category" id="category" value="{{ old('category') }}" placeholder="e.g. Mobiles" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
+                        <input type="text" name="category" id="category" placeholder="e.g. Mobiles" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
                     </div>
                 </div>
 
@@ -64,17 +64,17 @@
                 <div>
                     <label for="price" class="block text-sm font-medium text-gray-700">Price (Include Currency Symbol)</label>
                     <div class="mt-1">
-                        <input type="text" name="price" id="price" value="{{ old('price') }}" placeholder="e.g. ₹99,999" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
+                        <input type="text" name="price" id="price" placeholder="e.g. ₹99,999" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
                     </div>
                 </div>
 
-                <!-- Gallery Image URL -->
+                <!-- Gallery Image -->
                 <div class="sm:col-span-2">
-                    <label for="gallery" class="block text-sm font-medium text-gray-700">Image URL</label>
+                    <label for="gallery" class="block text-sm font-medium text-gray-700">Product Image</label>
                     <div class="mt-1">
-                        <input type="text" name="gallery" id="gallery" value="{{ old('gallery') }}" placeholder="https://example.com/image.jpg" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" required>
+                        <input type="file" name="gallery" id="gallery" accept="image/*" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border bg-white" required>
                     </div>
-                    <p class="mt-2 text-sm text-gray-500">Provide a direct link to the product image.</p>
+                    <p class="mt-2 text-sm text-gray-500">Upload a product image (JPEG, PNG, JPG, GIF, WEBP).</p>
                 </div>
 
                 <!-- Description -->

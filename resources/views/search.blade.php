@@ -14,7 +14,7 @@
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0" style="border-radius: 12px; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0.125rem 0.25rem rgba(0,0,0,0.075)';">
                             <a href="detail/{{ $item['id'] }}" class="text-decoration-none text-dark">
-                                <img src="{{ $item['gallery'] }}" class="card-img-top p-3" alt="{{ $item['name'] }}" style="height: 200px; object-fit: contain;">
+                                <img src="{{ filter_var($item['gallery'], FILTER_VALIDATE_URL) ? $item['gallery'] : asset($item['gallery']) }}" class="card-img-top p-3" alt="{{ $item['name'] }}" style="height: 200px; object-fit: contain;">
                                 <div class="card-body text-center">
                                     <h5 class="card-title fw-bold text-truncate">{{ $item['name'] }}</h5>
                                     <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">{{ $item['description'] }}</p>

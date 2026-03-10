@@ -129,7 +129,7 @@
                                 <tr>
                                     <td>
                                         <a href="/detail/{{ $order->id }}">
-                                            <img src="{{ $order->gallery }}" alt="{{ $order->name }}" class="order-img">
+                                            <img src="{{ filter_var($order->gallery, FILTER_VALIDATE_URL) ? $order->gallery : asset($order->gallery) }}" alt="{{ $order->name }}" class="order-img">
                                         </a>
                                     </td>
                                     <td>

@@ -18,7 +18,7 @@
                     @foreach ($data as $item)
                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}" style="background-color: #ffffff;">
                             <a href="detail/{{ $item['id'] }}">
-                                <img src="{{ $item['gallery'] }}" class="d-flex"
+                                <img src="{{ filter_var($item['gallery'], FILTER_VALIDATE_URL) ? $item['gallery'] : asset($item['gallery']) }}" class="d-flex"
                                     style="height: 400px; width: 500px; object-fit: contain; position: relative; left: 20%;"
                                     alt="{{ $item['name'] }}">
                                 <div class="carousel-caption d-none d-md-block carousel-caption-custom">
@@ -65,7 +65,7 @@
                     <div class="card h-100 border-0 rounded-4 shadow-sm hover-card premium-transition bg-white">
                         <a href="detail/{{ $item['id'] }}" class="text-decoration-none text-dark">
                         <div class="position-relative overflow-hidden rounded-top-4 bg-light d-flex align-items-center justify-content-center p-4">
-                            <img src="{{ $item['gallery'] }}" class="card-img-top object-fit-contain premium-transition" style="height: 180px; mix-blend-mode: multiply;" alt="{{ $item['name'] }}">
+                            <img src="{{ filter_var($item['gallery'], FILTER_VALIDATE_URL) ? $item['gallery'] : asset($item['gallery']) }}" class="card-img-top object-fit-contain premium-transition" style="height: 180px; mix-blend-mode: multiply;" alt="{{ $item['name'] }}">
                         </div>
                         
                         <div class="card-body p-4 d-flex flex-column text-center rounded-bottom-4">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin_usermodel;
 use App\Models\usermodel;
 use App\Models\ordermodel;
+use App\Models\Category;
 use App\Models\productsmodel;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +39,7 @@ class Admin extends Controller
         $totalOrders = ordermodel::count();
         $totalProducts = productsmodel::count();
         $totalUsers = usermodel::count();
-        $totalCategories = productsmodel::distinct('category')->count('category');
+        $totalCategories = \App\Models\Category::count();
         
         $totalPayments = 0;
         $allOrders = ordermodel::with('product')->get();
@@ -51,12 +52,9 @@ class Admin extends Controller
             }
         }
             
-        $totalFlavours = 0; // Placeholder
-        $totalFeedback = 0; // Placeholder
-            
         return view('Admin.dashboard', compact(
             'recentOrders', 'totalOrders', 'totalProducts', 'totalUsers', 
-            'totalCategories', 'totalPayments', 'totalFlavours', 'totalFeedback'
+             'totalPayments', 'totalCategories'
         ));
     }
 
@@ -111,7 +109,7 @@ class Admin extends Controller
             'price' => 'required',
             'category' => 'required|string|max:255',
             'description' => 'required|string',
-            'gallery' => 'required|string',
+            'gallery' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         $product = new productsmodel();
@@ -119,7 +117,13 @@ class Admin extends Controller
         $product->price = $request->price;
         $product->category = $request->category;
         $product->description = $request->description;
-        $product->gallery = $request->gallery;
+
+        if ($request->hasFile('gallery')) {
+            $imageName = time() . '_' . uniqid() . '.' . $request->gallery->extension();
+            $request->gallery->move(public_path('assets/products'), $imageName);
+            $product->gallery = 'assets/products/' . $imageName;
+        }
+
         $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product added successfully!');
@@ -140,14 +144,20 @@ class Admin extends Controller
             'price' => 'required',
             'category' => 'required|string|max:255',
             'description' => 'required|string',
-            'gallery' => 'required|string',
+            'gallery' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         $product->name = $request->name;
         $product->price = $request->price;
         $product->category = $request->category;
         $product->description = $request->description;
-        $product->gallery = $request->gallery;
+
+        if ($request->hasFile('gallery')) {
+            $imageName = time() . '_' . uniqid() . '.' . $request->gallery->extension();
+            $request->gallery->move(public_path('assets/products'), $imageName);
+            $product->gallery = 'assets/products/' . $imageName;
+        }
+
         $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
@@ -178,6 +188,13 @@ class Admin extends Controller
         $order->status = ucfirst(strtolower($request->status));
         $order->save();
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Order status updated to ' . $order->status . '.'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Order status updated to ' . $order->status . '.');
     }
 
@@ -197,7 +214,81 @@ class Admin extends Controller
         $order->payment_status = strtolower($request->payment_status);
         $order->save();
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment status updated to ' . ucfirst($order->payment_status) . '.'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Payment status updated to ' . ucfirst($order->payment_status) . '.');
+    }
+
+    // --- Category Management ---
+
+    public function categories(Request $request)
+    {
+        $query = Category::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('status', 'LIKE', "%{$search}%");
+        }
+
+        $categories = $query->orderBy('created_at', 'desc')->get();
+        return view('Admin.categories.index', compact('categories'));
+    }
+
+    public function addCategory()
+    {
+        return view('Admin.categories.add');
+    }
+
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'status' => 'required|boolean'
+        ]);
+
+        $category = new Category();
+        $category->name = $request->name;
+        $category->status = $request->status;
+        $category->save();
+
+        return redirect()->route('admin.categories')->with('success', 'Category added successfully!');
+    }
+
+    public function editCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        return view('Admin.categories.edit', compact('category'));
+    }
+
+    public function updateCategory(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+        
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'status' => 'required|boolean'
+        ]);
+
+        $category->name = $request->name;
+        $category->status = $request->status;
+        $category->save();
+
+        return redirect()->route('admin.categories')->with('success', 'Category updated successfully!');
+    }
+
+    public function deleteCategory($id)
+    {
+        $category = Category::find($id);
+        if ($category) {
+            $category->delete();
+        }
+        return redirect()->back()->with('success', 'Category deleted successfully!');
     }
 
     public function logout(Request $request)

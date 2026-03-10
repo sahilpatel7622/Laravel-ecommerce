@@ -36,7 +36,7 @@
                                     <tr>
                                         <td>
                                             <a href="detail/{{ $item->id }}" class="text-decoration-none text-dark d-flex align-items-center">
-                                                <img src="{{ $item->gallery }}" class="img-fluid rounded me-3" alt="{{ $item->name }}" style="width: 80px; height: 80px; object-fit: contain; border: 1px solid #eee;">
+                                                <img src="{{ filter_var($item->gallery, FILTER_VALIDATE_URL) ? $item->gallery : asset($item->gallery) }}" class="img-fluid rounded me-3" alt="{{ $item->name }}" style="width: 80px; height: 80px; object-fit: contain; border: 1px solid #eee;">
                                                 <div class="fw-bold">{{ $item->name }}</div>
                                             </a>
                                         </td>

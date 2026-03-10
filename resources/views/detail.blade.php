@@ -5,7 +5,7 @@
     <div class="container mt-5 mb-5 pt-4">
         <div class="row">
             <div class="col-md-6">
-                <img src="{{ $data->gallery }}" class="detail-img" alt="{{ $data->name }}">
+                <img src="{{ filter_var($data->gallery, FILTER_VALIDATE_URL) ? $data->gallery : asset($data->gallery) }}" class="detail-img" alt="{{ $data->name }}">
             </div>
             <div class="col-md-6">
                 <a href="/" class="btn btn-outline-dark mb-4"></i> &#8592; Go Back</a>
