@@ -115,7 +115,7 @@ class products extends Controller
 
     function products()
     {
-        $mobiles = productsmodel::where('category', 'mobiles')->get();
+        $mobiles = productsmodel::where('category', 'mobile')->get();
         $tvs = productsmodel::where('category', 'tv')->get();
         return view('products', compact('mobiles', 'tvs'));
     }
