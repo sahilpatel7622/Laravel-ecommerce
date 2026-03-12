@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2026 at 10:56 AM
+-- Generation Time: Mar 12, 2026 at 12:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,13 +35,6 @@ CREATE TABLE `add cart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `add cart`
---
-
-INSERT INTO `add cart` (`id`, `product_id`, `user_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(5, 6, 1, 1, '2026-03-10 04:25:15', '2026-03-10 04:25:15');
 
 -- --------------------------------------------------------
 
@@ -84,7 +77,8 @@ CREATE TABLE `categories` (
 INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'TV', 1, '2026-03-10 04:03:11', '2026-03-10 04:03:11'),
 (3, 'Mobile', 1, '2026-03-10 04:03:46', '2026-03-10 04:04:10'),
-(4, 'Laptop', 0, '2026-03-10 04:04:01', '2026-03-10 04:04:01');
+(4, 'Laptop', 0, '2026-03-10 04:04:01', '2026-03-10 04:04:01'),
+(5, 'test', 1, '2026-03-12 03:22:27', '2026-03-12 03:22:27');
 
 -- --------------------------------------------------------
 
@@ -114,7 +108,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (9, '2026_02_21_164950_trending', 7),
 (10, '2026_02_26_090458_add_cart', 8),
 (11, '2026_02_28_075536_admin', 9),
-(13, '2026_03_10_092822_create_categories_table', 10);
+(13, '2026_03_10_092822_create_categories_table', 10),
+(14, '2026_03_12_092026_add_otp_to_users_table', 11);
 
 -- --------------------------------------------------------
 
@@ -140,9 +135,10 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `product_id`, `amount`, `address`, `status`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
-(38, 1, 11, '17641.3803', '123, ahmedabad, Gujarat - 380000', 'Pending', 'cash', 'pending', '2026-03-09 00:20:36', '2026-03-10 03:54:58'),
-(39, 1, 10, '34215.78', 'amreli, amreli, gujarat - 365550', 'Delivered', 'upi', 'completed', '2026-03-09 00:24:06', '2026-03-10 03:55:15'),
-(40, 8, 2, '155974.545', '01, ahmedabad, GUJARAT - 380059', 'Pending', 'card', 'refunded', '2026-03-09 00:45:54', '2026-03-10 03:54:04');
+(38, 1, 11, '17641.3803', '123, ahmedabad, Gujarat - 380000', 'Cancelled', 'cash', 'pending', '2026-03-09 00:20:36', '2026-03-10 07:41:16'),
+(39, 1, 10, '34215.78', 'amreli, amreli, gujarat - 365550', 'Delivered', 'upi', 'completed', '2026-03-09 00:24:06', '2026-03-10 10:45:38'),
+(40, 8, 2, '155974.545', '01, ahmedabad, GUJARAT - 380059', 'Pending', 'card', 'refunded', '2026-03-09 00:45:54', '2026-03-10 03:54:04'),
+(41, 1, 3, '43964.28', '101, ahmedabad, gujarat - 380059', 'Pending', 'cash', 'Pending', '2026-03-11 00:22:02', '2026-03-11 00:22:02');
 
 -- --------------------------------------------------------
 
@@ -187,7 +183,7 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `name`, `price`, `category`, `gallery`, `description`, `created_at`, `updated_at`) VALUES
 (1, 'Redmi Note 15', '₹30,999', 'Mobile', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', 'REDMI Note 15 Pro 5G (Silver Ash 8GB+256GB) | 200MasterPixel OIS Camera | Dimensity 7400-Ultra | 17.3cm CrystalRes AMOLED Screen', NULL, '2026-03-07 06:56:10'),
 (2, 'Apple iPhone 16 Pro', '₹1,59,900', 'Mobile', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', 'iPhone 16 Pro Max 1 TB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life.\r\n', NULL, NULL),
-(3, 'Samsung Galaxy S23 Ultra', '₹1,09,999', 'Mobile', 'https://m.media-amazon.com/images/I/71qGismu6NL._SX679_.jpg', 'Samsung Galaxy S23 FE 5G (Mint, 8GB, 128GB Storage)', NULL, NULL),
+(3, 'Samsung Galaxy S23 Ultra', '₹99,000', 'Mobile', 'https://m.media-amazon.com/images/I/71qGismu6NL._SX679_.jpg', 'Samsung Galaxy S23 FE 5G (Mint, 8GB, 128GB Storage)', NULL, '2026-03-11 00:22:46'),
 (4, 'OnePlus 15R 5G', '₹49,999', 'Mobile', 'https://m.media-amazon.com/images/I/61AsNTuJ6mL._SX679_.jpg', 'The OnePlus 15R 5G is a mid-range smartphone that offers a range of features and specifications.', NULL, NULL),
 (5, 'Google Pixel 7 Pro', '₹34,999', 'Mobile', 'https://m.media-amazon.com/images/I/51OFxuD1GgL._SX522_.jpg', 'Google Pixel 7 Pro (Obsidian, 128 GB) (12 GB RAM)', NULL, NULL),
 (6, 'LG', '₹70,000', 'TV', 'https://m.media-amazon.com/images/I/71yz55f1VlL._SX522_.jpg', 'LG 139 cm (55 Inches) UR7500 AI Series 4K Ultra HD (3840 x 2160) LED Smart TV (Black) (2020 Model)', NULL, NULL),
@@ -237,16 +233,18 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `Gender` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `otp` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `number`, `email`, `password`, `Gender`, `created_at`, `updated_at`) VALUES
-(1, 'Dhruvi', '6359950829', 'dhruvi@gmail.com', '$2y$10$FSnb8Y8iyzjKwqxCEzLGRO1hjNS7KgWO8pjX05VN0IPSCMCvux0K.', 'Female', '2026-02-20 11:20:38', '2026-02-20 11:31:05'),
-(8, 'sahil', '7622920559', 'sahil@gmail.com', '$2y$10$0IEbV87otdT.ckLK1udpWuljRsK0TJ32ULvbUykPMCBmoLnIM94li', '', '2026-03-07 06:41:02', '2026-03-07 06:41:02');
+INSERT INTO `users` (`id`, `name`, `number`, `email`, `password`, `Gender`, `created_at`, `updated_at`, `otp`) VALUES
+(1, 'Dhruvi', '6359950829', 'dhruvi@gmail.com', '$2y$10$FSnb8Y8iyzjKwqxCEzLGRO1hjNS7KgWO8pjX05VN0IPSCMCvux0K.', 'Female', '2026-02-20 11:20:38', '2026-03-12 05:05:31', NULL),
+(8, 'sahil', '7622920559', 'sahil@gmail.com', '$2y$10$0IEbV87otdT.ckLK1udpWuljRsK0TJ32ULvbUykPMCBmoLnIM94li', '', '2026-03-07 06:41:02', '2026-03-07 06:41:02', NULL),
+(9, 'sahil patel', '07622920559', 'sahilpatel55500@gmail.com', '$2y$10$vFCngJOAaOvVov8QqclAnugctvp/iQbBiicqzWbDHqbOPyddEIpQG', '', '2026-03-12 05:06:14', '2026-03-12 05:36:08', NULL);
 
 --
 -- Indexes for dumped tables
@@ -319,7 +317,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `add cart`
 --
 ALTER TABLE `add cart`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -331,19 +329,19 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -367,7 +365,7 @@ ALTER TABLE `trending`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

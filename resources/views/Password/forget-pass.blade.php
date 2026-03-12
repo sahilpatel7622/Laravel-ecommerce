@@ -3,9 +3,9 @@
 @section('hide_footer', true)
 
     <div class="container custom-login">
-        <div class="glass-card">
-            <h1>Login</h1>
-            
+        <div class="glass-card" style="background-color: #667eea;">
+            <h1>Forgot Password</h1>
+            <p style="position: relative; bottom: 17px;">Enter your email address to reset your password.</p>
             @if(session('error'))
                 <div class="alert alert-custom-error">
                     {{ session('error') }}
@@ -22,19 +22,14 @@
                 </div>
             @endif
 
-            <form method="post" action="{{ route('login_store') }}">
+            <form method="post" action="{{ route('Password.send-otp') }}">
                 @csrf
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter your email">
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail1"
+                        placeholder="Enter your email" required>
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
-                </div>
-                <p style="position: relative; left: 110px; bottom: 8px; font-size: 16px;"><a href="{{ route('Password.forget-pass') }}">Forgot Password?</a></p>
                 <button type="submit" class="btn btn-primary">Login</button>
-                <p>New here? <a href="{{ route('register') }}">Create an Account</a></p>
             </form>
         </div>
     </div>
@@ -42,7 +37,7 @@
 @endsection
 
 <style>
-    .custom-login{
+    .custom-login {
         height: 500px;
         padding-top: 100px;
     }

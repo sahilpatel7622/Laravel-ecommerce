@@ -21,7 +21,7 @@
 
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">All Categories</h3>
+        <h3 class="text-lg font-medium leading-6 text-gray-900">All Categories ({{ $categories->count() }})</h3>
         
         <!-- Search Form -->
         <form action="{{ route('admin.categories') }}" method="GET" class="relative max-w-lg w-full flex items-center gap-2">

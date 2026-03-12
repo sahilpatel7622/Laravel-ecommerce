@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\products;
+use App\Http\Controllers\ForgotController;
 
 use App\Http\Controllers\Admin\Admin;
 
@@ -103,3 +104,13 @@ Route::middleware(['admin.auth'])->group(function () {
 
     Route::get('/admin/logout',[Admin::class,'logout'])->name('admin.logout');
 });
+
+
+// Password reset routes
+
+Route::get('/Password/forget-pass', [ForgotController::class,'forgetForm'])->name('Password.forget-pass');
+Route::post('/Password/send-otp', [ForgotController::class,'sendOtp'])->name('Password.send-otp');
+Route::get('/Password/otp', [ForgotController::class,'otpForm'])->name('Password.otp-form');
+Route::post('/Password/verify-otp', [ForgotController::class,'verifyOtp'])->name('Password.verify-otp');
+Route::get('/Password/new-pass', [ForgotController::class,'newPasswordForm'])->name('Password.new-pass');
+Route::post('/Password/update-password', [ForgotController::class,'updatePassword'])->name('Password.update-password');
