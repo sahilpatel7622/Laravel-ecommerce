@@ -29,7 +29,7 @@
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1"
                         placeholder="Enter your email" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>

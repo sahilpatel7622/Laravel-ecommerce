@@ -34,13 +34,36 @@ class ForgotController extends Controller
         $user->otp = $otp;
         $user->save();
 
-        Mail::raw("Your OTP is: " . $otp, function ($msg) use ($req) {
+        Mail::html("
+
+        <h3 style='color:#333'><b><center>Welcome To E-Comm Family</center></b></h3>
+
+        <p style='color:#666;font-size:14px'>
+        Use the verification code below to complete your request.
+        </p>
+
+        <div style='margin:30px 0'>
+            <h2 style='font-size:30px' ><center><b>$otp</b></center></h2>
+        </div>
+
+        <p style='color:#888;font-size:13px'>
+        This OTP will expire in 5 minutes.
+        </p>
+
+        <p style='color:#aaa;font-size:12px'>
+        If you didn't request this email, please ignore it.
+        </p>
+
+        </div>
+        </div>
+        ", function ($msg) use ($req) {
+
             $msg->to($req->email)
-                ->subject('Password Reset OTP');
+                ->subject('Your Verification Code');
+
         });
 
         Session::put('email', $req->email);
-
         return redirect('/Password/otp');
     }
 
