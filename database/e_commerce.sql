@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 12, 2026 at 12:06 PM
+-- Generation Time: Mar 16, 2026 at 09:52 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -75,10 +75,10 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'TV', 1, '2026-03-10 04:03:11', '2026-03-10 04:03:11'),
-(3, 'Mobile', 1, '2026-03-10 04:03:46', '2026-03-10 04:04:10'),
-(4, 'Laptop', 0, '2026-03-10 04:04:01', '2026-03-10 04:04:01'),
-(5, 'test', 1, '2026-03-12 03:22:27', '2026-03-12 03:22:27');
+(1, 'Mobile', 1, '2026-03-16 03:06:30', '2026-03-16 03:06:30'),
+(2, 'Tv', 1, '2026-03-16 03:06:37', '2026-03-16 03:06:37'),
+(3, 'Laptop', 0, '2026-03-16 03:06:49', '2026-03-16 03:06:49'),
+(4, 'Fridge', 0, '2026-03-16 03:06:59', '2026-03-16 03:06:59');
 
 -- --------------------------------------------------------
 
@@ -181,18 +181,18 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `category`, `gallery`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Redmi Note 15', '₹30,999', 'Mobile', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', 'REDMI Note 15 Pro 5G (Silver Ash 8GB+256GB) | 200MasterPixel OIS Camera | Dimensity 7400-Ultra | 17.3cm CrystalRes AMOLED Screen', NULL, '2026-03-07 06:56:10'),
-(2, 'Apple iPhone 16 Pro', '₹1,59,900', 'Mobile', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', 'iPhone 16 Pro Max 1 TB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life.\r\n', NULL, NULL),
-(3, 'Samsung Galaxy S23 Ultra', '₹99,000', 'Mobile', 'https://m.media-amazon.com/images/I/71qGismu6NL._SX679_.jpg', 'Samsung Galaxy S23 FE 5G (Mint, 8GB, 128GB Storage)', NULL, '2026-03-11 00:22:46'),
-(4, 'OnePlus 15R 5G', '₹49,999', 'Mobile', 'https://m.media-amazon.com/images/I/61AsNTuJ6mL._SX679_.jpg', 'The OnePlus 15R 5G is a mid-range smartphone that offers a range of features and specifications.', NULL, NULL),
-(5, 'Google Pixel 7 Pro', '₹34,999', 'Mobile', 'https://m.media-amazon.com/images/I/51OFxuD1GgL._SX522_.jpg', 'Google Pixel 7 Pro (Obsidian, 128 GB) (12 GB RAM)', NULL, NULL),
-(6, 'LG', '₹70,000', 'TV', 'https://m.media-amazon.com/images/I/71yz55f1VlL._SX522_.jpg', 'LG 139 cm (55 Inches) UR7500 AI Series 4K Ultra HD (3840 x 2160) LED Smart TV (Black) (2020 Model)', NULL, NULL),
-(7, 'Samsung', '₹80,000', 'TV', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', 'Samsung 139 cm (55 inches) QN90C Neo QLED 4K Ultra HD Smart TV (Black)', NULL, NULL),
-(8, 'Sony', '₹63,000', 'TV', 'https://m.media-amazon.com/images/I/81Vs1ZXn43L._SX522_.jpg', 'Sony 139 cm (55 inches) X80K Series 4K Ultra HD Smart LED Google TV XR55X80K', NULL, NULL),
-(9, 'Toshiba', '₹30,000', 'TV', 'https://m.media-amazon.com/images/I/9121McCSSxL._SX522_.jpg', 'Toshiba 139 cm (55 inches) C350NP Series 4K Ultra HD Smart LED Google TV 55C350NP (Black)', NULL, NULL),
-(10, 'TCL TV', '₹35,000', 'TV', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', 'TCL 139 cm (55 inches) 4K UHD Smart QLED Google TV 55T6C (Black)', NULL, NULL),
-(11, 'iQOO Z10x 5G', '₹17,998 ', 'Mobile', 'https://m.media-amazon.com/images/I/61oa+zoqwmL._SX679_.jpg', 'iQOO Z10x 5G (Ultramarine, 8GB RAM, 256GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Durability', NULL, NULL),
-(12, 'Xiaomi', '₹29,999 ', 'TV', 'https://m.media-amazon.com/images/I/71mA83yc8xL._SX522_.jpg', 'Xiaomi 138 cm (55 inch) FX Ultra HD 4K Smart LED Fire TV L55MB-FIN\r\nWarranty Information: Enjoy 1 Year of Comprehensive Warranty', NULL, NULL);
+(1, 'Redmi Note 15', '₹30,999', '1', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', 'REDMI Note 15 Pro 5G (Silver Ash 8GB+256GB) | 200MasterPixel OIS Camera | Dimensity 7400-Ultra | 17.3cm CrystalRes AMOLED Screen', NULL, '2026-03-16 03:19:25'),
+(2, 'Apple iPhone 16 Pro', '₹1,19,900', '1', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', 'iPhone 16 Pro Max 1 TB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life.', NULL, '2026-03-16 03:19:39'),
+(3, 'Samsung Galaxy S23 Ultra', '₹89,000', '1', 'https://m.media-amazon.com/images/I/71qGismu6NL._SX679_.jpg', 'Samsung Galaxy S23 FE 5G (Mint, 8GB, 128GB Storage)', NULL, '2026-03-16 03:19:51'),
+(4, 'OnePlus 15R 5G', '₹39,999', '1', 'https://m.media-amazon.com/images/I/61AsNTuJ6mL._SX679_.jpg', 'The OnePlus 15R 5G is a mid-range smartphone that offers a range of features and specifications.', NULL, '2026-03-16 03:20:02'),
+(5, 'Google Pixel 7 Pro', '₹28,999', '1', 'https://m.media-amazon.com/images/I/51OFxuD1GgL._SX522_.jpg', 'Google Pixel 7 Pro (Obsidian, 128 GB) (12 GB RAM)', NULL, '2026-03-16 03:20:15'),
+(6, 'LG', '₹59,000', '2', 'https://m.media-amazon.com/images/I/71yz55f1VlL._SX522_.jpg', 'LG 139 cm (55 Inches) UR7500 AI Series 4K Ultra HD (3840 x 2160) LED Smart TV (Black) (2020 Model)', NULL, '2026-03-16 03:20:30'),
+(7, 'Samsung', '₹70,000', '2', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', 'Samsung 139 cm (55 inches) QN90C Neo QLED 4K Ultra HD Smart TV (Black)', NULL, '2026-03-16 03:20:44'),
+(8, 'Sony', '₹54,000', '2', 'https://m.media-amazon.com/images/I/81Vs1ZXn43L._SX522_.jpg', 'Sony 139 cm (55 inches) X80K Series 4K Ultra HD Smart LED Google TV XR55X80K', NULL, '2026-03-16 03:20:56'),
+(9, 'Toshiba', '₹29,000', '2', 'https://m.media-amazon.com/images/I/9121McCSSxL._SX522_.jpg', 'Toshiba 139 cm (55 inches) C350NP Series 4K Ultra HD Smart LED Google TV 55C350NP (Black)', NULL, '2026-03-16 03:21:08'),
+(10, 'TCL TV', '₹32,000', '2', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', 'TCL 139 cm (55 inches) 4K UHD Smart QLED Google TV 55T6C (Black)', NULL, '2026-03-16 03:21:53'),
+(11, 'iQOO Z10x 5G', '₹15,999', '1', 'https://m.media-amazon.com/images/I/61oa+zoqwmL._SX679_.jpg', 'iQOO Z10x 5G (Ultramarine, 8GB RAM, 256GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Durability', NULL, '2026-03-16 03:21:31'),
+(12, 'Xiaomi', '₹29,999', '2', 'https://m.media-amazon.com/images/I/71mA83yc8xL._SX522_.jpg', 'Xiaomi 138 cm (55 inch) FX Ultra HD 4K Smart LED Fire TV L55MB-FIN\r\nWarranty Information: Enjoy 1 Year of Comprehensive Warranty', NULL, '2026-03-16 03:21:39');
 
 -- --------------------------------------------------------
 
@@ -329,7 +329,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `migrations`

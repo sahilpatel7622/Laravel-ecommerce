@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\productsmodel;
 use App\Models\cartmodel;
 use App\Models\ordermodel;
+use App\Models\Category;
 use App\Models\trendingmodel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,9 +34,14 @@ class products extends Controller
     function search(Request $request)
     {
         $query = $request->input('query');
-        $data = productsmodel::where('name', 'like', '%' . $query . '%')
-            ->orWhere('category', 'like', '%' . $query . '%')
+
+        $data = productsmodel::with('categories')
+            ->where('name', 'like', '%' . $query . '%')
+            ->orWhereHas('categories', function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })
             ->get();
+
         return view('search', compact('data'));
     }
 
@@ -43,8 +49,8 @@ class products extends Controller
     {
         if (Auth::check()) {
             $cartItem = cartmodel::where('user_id', Auth::id())
-                                ->where('product_id', $request->product_id)
-                                ->first();
+                ->where('product_id', $request->product_id)
+                ->first();
 
             if ($cartItem) {
                 $cartItem->quantity += $request->input('quantity', 1);
@@ -101,8 +107,8 @@ class products extends Controller
     {
         if (Auth::check()) {
             $cartItem = cartmodel::where('user_id', Auth::id())
-                                ->where('id', $id)
-                                ->first();
+                ->where('id', $id)
+                ->first();
             if ($cartItem && $quantity > 0) {
                 $cartItem->quantity = $quantity;
                 $cartItem->save();
@@ -115,8 +121,8 @@ class products extends Controller
 
     function products()
     {
-        $mobiles = productsmodel::where('category', 'mobile')->get();
-        $tvs = productsmodel::where('category', 'tv')->get();
+        $mobiles = productsmodel::where('category', '1')->get();
+        $tvs = productsmodel::where('category', '2')->get();
         return view('products', compact('mobiles', 'tvs'));
     }
 

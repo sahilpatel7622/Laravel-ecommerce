@@ -22,12 +22,12 @@ class Admin extends Controller
     {
         $admin = Admin_usermodel::where('email', $request->email)->first();
 
-        if($admin && $admin->password === $request->password){
+        if ($admin && $admin->password === $request->password) {
             $request->session()->put('admin_logged_in', true);
             $request->session()->put('admin_id', $admin->id);
             return redirect()->route('admin.dashboard');
         }
-        return back()->withErrors(['email'=>'Invalid login details']);
+        return back()->withErrors(['email' => 'Invalid login details']);
     }
     function dashboard()
     {
@@ -35,12 +35,12 @@ class Admin extends Controller
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
-            
+
         $totalOrders = ordermodel::count();
         $totalProducts = productsmodel::count();
         $totalUsers = usermodel::count();
         $totalCategories = \App\Models\Category::count();
-        
+
         $totalPayments = 0;
         $allOrders = ordermodel::with('product')->get();
         foreach ($allOrders as $order) {
@@ -51,10 +51,14 @@ class Admin extends Controller
                 $totalPayments += $price;
             }
         }
-            
+
         return view('Admin.dashboard', compact(
-            'recentOrders', 'totalOrders', 'totalProducts', 'totalUsers', 
-             'totalPayments', 'totalCategories'
+            'recentOrders',
+            'totalOrders',
+            'totalProducts',
+            'totalUsers',
+            'totalPayments',
+            'totalCategories'
         ));
     }
 
@@ -65,8 +69,8 @@ class Admin extends Controller
         if ($request->has('search') && $request->input('search') != '') {
             $search = $request->input('search');
             $query->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('email', 'LIKE', "%{$search}%")
-                  ->orWhere('number', 'LIKE', "%{$search}%");
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('number', 'LIKE', "%{$search}%");
         }
 
         $users = $query->orderBy('created_at', 'desc')->get();
@@ -89,8 +93,8 @@ class Admin extends Controller
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('category', 'LIKE', "%{$search}%")
-                  ->orWhere('price', 'LIKE', "%{$search}%");
+                ->orWhere('category', 'LIKE', "%{$search}%")
+                ->orWhere('price', 'LIKE', "%{$search}%");
         }
 
         $products = $query->get();
@@ -99,7 +103,8 @@ class Admin extends Controller
 
     public function addProduct()
     {
-        return view('Admin.add-product');
+        $categories = Category::all();
+        return view('Admin.add-product', compact('categories'));
     }
 
     public function storeProduct(Request $request)
@@ -132,13 +137,14 @@ class Admin extends Controller
     public function editProduct($id)
     {
         $product = productsmodel::findOrFail($id);
-        return view('Admin.edit-product', compact('product'));
+        $categories = Category::all();
+        return view('Admin.edit-product', compact('product','categories'));
     }
 
     public function updateProduct(Request $request, $id)
     {
         $product = productsmodel::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required',
@@ -233,7 +239,7 @@ class Admin extends Controller
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('status', 'LIKE', "%{$search}%");
+                ->orWhere('status', 'LIKE', "%{$search}%");
         }
 
         $categories = $query->orderBy('created_at', 'desc')->get();
@@ -269,7 +275,7 @@ class Admin extends Controller
     public function updateCategory(Request $request, $id)
     {
         $category = Category::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'status' => 'required|boolean'
@@ -295,5 +301,11 @@ class Admin extends Controller
     {
         $request->session()->forget(['admin_logged_in', 'admin_id']);
         return redirect()->route('admin.login');
+    }
+
+    public function view($id)
+    {
+        $order = ordermodel::with(['user', 'product'])->findOrFail($id);
+        return view('Admin.view', compact('order'));
     }
 }

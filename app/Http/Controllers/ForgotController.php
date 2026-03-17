@@ -22,7 +22,6 @@ class ForgotController extends Controller
     // send otp
     function sendOtp(Request $req)
     {
-
         $user = usermodel::where('email', $req->email)->first();
 
         if (!$user) {
@@ -78,7 +77,6 @@ class ForgotController extends Controller
     // verify otp
     function verifyOtp(Request $req)
     {
-
         $user = usermodel::where('email', Session::get('email'))
             ->where('otp', $req->otp)
             ->first();
@@ -96,7 +94,6 @@ class ForgotController extends Controller
     {
         return view('Password.new-pass');
     }
-
 
     // update password
     function updatePassword(Request $req)

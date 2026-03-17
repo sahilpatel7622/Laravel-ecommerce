@@ -103,6 +103,8 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/admin/categories/delete/{id}', [Admin::class, 'deleteCategory'])->name('admin.categories.delete');
 
     Route::get('/admin/logout',[Admin::class,'logout'])->name('admin.logout');
+
+    Route::get('/admin/view{id}',[Admin::class,'view'])->name('admin.view');
 });
 
 

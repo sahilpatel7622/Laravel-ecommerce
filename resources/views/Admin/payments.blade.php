@@ -47,7 +47,7 @@
 
                     <!-- Product ID -->
                     <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900">{{ $order->product ? $order->product->id : 'N/A' }}</div>
+                        <div class="text-sm font-medium text-gray-900">#{{ $order->product ? $order->product->id : 'N/A' }}</div>
                     </td>
                     
                     <!-- Amount Details -->
