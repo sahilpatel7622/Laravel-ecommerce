@@ -158,7 +158,7 @@
                                 {{ $order->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                                {{ $order->product ? number_format($order->amount, 0) : 'N/A' }}
+                                {{ $order->items->isNotEmpty() ? '₹' . number_format($order->amount, 0) : 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 

@@ -170,6 +170,7 @@
             <form id="checkoutForm" action="/orderplace" method="POST">
                 @csrf
                 <input type="hidden" name="buy_now" value="{{ request('buy_now') }}">
+                <input type="hidden" name="qty" value="{{ request('qty', 1) }}">
                 <div class="row mt-4">
                     <!-- Left Column: Address and Payment -->
                     <div class="col-lg-7 col-xl-8 mb-4">

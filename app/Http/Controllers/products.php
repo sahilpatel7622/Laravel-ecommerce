@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\productsmodel;
 use App\Models\cartmodel;
 use App\Models\ordermodel;
+use App\Models\OrderItem;
 use App\Models\trendingmodel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -151,7 +152,6 @@ class products extends Controller
 
         $order = new ordermodel;
         $order->user_id = $userId;
-        // $order->product_id = 0; // Fallback for existing database schema
         $order->amount = round((float) str_replace(',', '', $request->input('total_amount')));
         $order->address = $request->address . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->zip;
         $order->payment_method = $request->payment;
@@ -160,16 +160,15 @@ class products extends Controller
         $order->save();
 
         if ($request->has('buy_now') && $request->input('buy_now')) {
-            \App\Models\OrderItem::create([
+            OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $request->input('buy_now'),
                 'quantity' => $request->input('qty', 1),
-                'price' => round((float) str_replace(',', '', $request->input('total_amount'))),
             ]);
         } else {
             $carts = cartmodel::where('user_id', $userId)->get();
             foreach ($carts as $cart) {
-                \App\Models\OrderItem::create([
+                OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
                     'quantity' => $cart->quantity,
