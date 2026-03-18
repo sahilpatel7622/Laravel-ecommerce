@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2026 at 09:52 AM
+-- Generation Time: Mar 18, 2026 at 11:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -109,7 +109,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (10, '2026_02_26_090458_add_cart', 8),
 (11, '2026_02_28_075536_admin', 9),
 (13, '2026_03_10_092822_create_categories_table', 10),
-(14, '2026_03_12_092026_add_otp_to_users_table', 11);
+(14, '2026_03_12_092026_add_otp_to_users_table', 11),
+(15, '2026_03_18_090513_add_order_number_to_orders_table', 12),
+(16, '2026_03_18_091456_create_order_items_table', 13);
 
 -- --------------------------------------------------------
 
@@ -120,7 +122,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
   `amount` varchar(255) DEFAULT NULL,
   `address` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'pending',
@@ -134,11 +135,34 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `product_id`, `amount`, `address`, `status`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
-(38, 1, 11, '17641.3803', '123, ahmedabad, Gujarat - 380000', 'Cancelled', 'cash', 'pending', '2026-03-09 00:20:36', '2026-03-10 07:41:16'),
-(39, 1, 10, '34215.78', 'amreli, amreli, gujarat - 365550', 'Delivered', 'upi', 'completed', '2026-03-09 00:24:06', '2026-03-10 10:45:38'),
-(40, 8, 2, '155974.545', '01, ahmedabad, GUJARAT - 380059', 'Pending', 'card', 'refunded', '2026-03-09 00:45:54', '2026-03-10 03:54:04'),
-(41, 1, 3, '43964.28', '101, ahmedabad, gujarat - 380059', 'Pending', 'cash', 'Pending', '2026-03-11 00:22:02', '2026-03-11 00:22:02');
+INSERT INTO `orders` (`id`, `user_id`, `amount`, `address`, `status`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
+(50, 1, '200817', '123, ahmedabad, Gujarat - 380000', 'Pending', 'upi', 'Completed', '2026-03-18 04:00:33', '2026-03-18 04:00:33'),
+(55, 1, '90754', '123, ahmedabad, Gujarat - 380000', 'Delivered', 'card', 'completed', '2026-03-18 04:11:17', '2026-03-18 04:17:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(4, 50, 2, 1, '2026-03-18 04:00:34', '2026-03-18 04:00:34'),
+(5, 50, 7, 1, '2026-03-18 04:00:34', '2026-03-18 04:00:34'),
+(6, 50, 11, 1, '2026-03-18 04:00:34', '2026-03-18 04:00:34'),
+(10, 55, 1, 3, '2026-03-18 04:11:17', '2026-03-18 04:11:17');
 
 -- --------------------------------------------------------
 
@@ -190,7 +214,7 @@ INSERT INTO `products` (`id`, `name`, `price`, `category`, `gallery`, `descripti
 (7, 'Samsung', '₹70,000', '2', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', 'Samsung 139 cm (55 inches) QN90C Neo QLED 4K Ultra HD Smart TV (Black)', NULL, '2026-03-16 03:20:44'),
 (8, 'Sony', '₹54,000', '2', 'https://m.media-amazon.com/images/I/81Vs1ZXn43L._SX522_.jpg', 'Sony 139 cm (55 inches) X80K Series 4K Ultra HD Smart LED Google TV XR55X80K', NULL, '2026-03-16 03:20:56'),
 (9, 'Toshiba', '₹29,000', '2', 'https://m.media-amazon.com/images/I/9121McCSSxL._SX522_.jpg', 'Toshiba 139 cm (55 inches) C350NP Series 4K Ultra HD Smart LED Google TV 55C350NP (Black)', NULL, '2026-03-16 03:21:08'),
-(10, 'TCL TV', '₹32,000', '2', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', 'TCL 139 cm (55 inches) 4K UHD Smart QLED Google TV 55T6C (Black)', NULL, '2026-03-16 03:21:53'),
+(10, 'TCL', '₹32,000', '2', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', 'TCL 139 cm (55 inches) 4K UHD Smart QLED Google TV 55T6C (Black)', NULL, '2026-03-17 07:45:52'),
 (11, 'iQOO Z10x 5G', '₹15,999', '1', 'https://m.media-amazon.com/images/I/61oa+zoqwmL._SX679_.jpg', 'iQOO Z10x 5G (Ultramarine, 8GB RAM, 256GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Durability', NULL, '2026-03-16 03:21:31'),
 (12, 'Xiaomi', '₹29,999', '2', 'https://m.media-amazon.com/images/I/71mA83yc8xL._SX522_.jpg', 'Xiaomi 138 cm (55 inch) FX Ultra HD 4K Smart LED Fire TV L55MB-FIN\r\nWarranty Information: Enjoy 1 Year of Comprehensive Warranty', NULL, '2026-03-16 03:21:39');
 
@@ -216,8 +240,8 @@ CREATE TABLE `trending` (
 INSERT INTO `trending` (`id`, `name`, `price`, `gallery`, `created_at`, `updated_at`) VALUES
 (1, 'Redmi Note 15', '₹30,999', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', NULL, NULL),
 (2, 'Apple iPhone 16 Pro', '₹1,59,900', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', NULL, NULL),
-(3, 'Samsung', '₹80,000', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', NULL, NULL),
-(4, 'TCL TV', '₹35,000', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', NULL, NULL);
+(7, 'Samsung', '₹80,000', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', NULL, NULL),
+(10, 'TCL TV', '₹35,000', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -243,8 +267,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `number`, `email`, `password`, `Gender`, `created_at`, `updated_at`, `otp`) VALUES
 (1, 'Dhruvi', '6359950829', 'dhruvi@gmail.com', '$2y$10$FSnb8Y8iyzjKwqxCEzLGRO1hjNS7KgWO8pjX05VN0IPSCMCvux0K.', 'Female', '2026-02-20 11:20:38', '2026-03-12 05:05:31', NULL),
-(8, 'sahil', '7622920559', 'sahil@gmail.com', '$2y$10$0IEbV87otdT.ckLK1udpWuljRsK0TJ32ULvbUykPMCBmoLnIM94li', '', '2026-03-07 06:41:02', '2026-03-07 06:41:02', NULL),
-(9, 'sahil patel', '07622920559', 'sahilpatel55500@gmail.com', '$2y$10$vFCngJOAaOvVov8QqclAnugctvp/iQbBiicqzWbDHqbOPyddEIpQG', '', '2026-03-12 05:06:14', '2026-03-12 05:36:08', NULL);
+(10, 'toto papu', '7622920577', 'sahilatel55500@gmail.com', '$2y$10$IKm3lp9NWlPAzItS83UCc.l.m7sSXo86yFBNY7tblAJcS.n7.8ffK', '', '2026-03-18 03:17:58', '2026-03-18 03:17:58', NULL);
 
 --
 -- Indexes for dumped tables
@@ -283,6 +306,14 @@ ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_items_order_id_foreign` (`order_id`),
+  ADD KEY `order_items_product_id_foreign` (`product_id`);
+
+--
 -- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
@@ -317,7 +348,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `add cart`
 --
 ALTER TABLE `add cart`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -335,13 +366,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -353,19 +390,30 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `trending`
 --
 ALTER TABLE `trending`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
