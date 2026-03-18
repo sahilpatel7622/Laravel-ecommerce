@@ -39,7 +39,7 @@ class Admin extends Controller
         $totalOrders = ordermodel::count();
         $totalProducts = productsmodel::count();
         $totalUsers = usermodel::count();
-        $totalCategories = \App\Models\Category::count();
+        $totalCategories = Category::count();
 
         $totalPayments = 0;
         $allOrders = ordermodel::with('product')->get();

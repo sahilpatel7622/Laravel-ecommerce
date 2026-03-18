@@ -19,7 +19,7 @@ class userController extends Controller
             [
                 'name'=>'required',
                 'email'=>'required|email|unique:users,email',
-                'number'=>'required|min:10',
+                'number'=>'required|min:10|unique:users,number',
                 'password'=>'required|min:6',
                 
             ]);
