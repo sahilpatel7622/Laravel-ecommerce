@@ -26,8 +26,8 @@
                 <tr>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Info</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Details</th>
+                    <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th> -->
+                    <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Details</th> -->
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
@@ -49,21 +49,27 @@
                     </td>
                     
                     <!-- Product Details -->
-                    <td class="px-6 py-4">
-                        <div class="flex items-center">
-                            @if($order->product)
-                                <div class="flex-shrink-0 h-10 w-10 mr-3">
-                                    <img class="h-10 w-10 rounded-md object-cover border border-gray-200" src="{{ filter_var($order->product->gallery, FILTER_VALIDATE_URL) ? $order->product->gallery : asset($order->product->gallery) }}" alt="">
-                                </div>
-                                <div>
-                                    <div class="text-sm font-medium text-gray-900 max-w-[150px] truncate" title="{{ $order->product->name }}">{{ $order->product->name }}</div>
-                                    <div class="text-xs font-semibold text-gray-700 mt-0.5">₹{{ number_format($order->amount, 0) }}</div>
-                                </div>
-                            @else
-                                <div class="text-sm text-red-500 italic">Product Deleted</div>
-                            @endif
+                    <!-- <td class="px-6 py-4">
+                        <div class="flex flex-col gap-3">
+                            @forelse($order->items as $item)
+                                @if($item->product)
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10 mr-3">
+                                            <img class="h-10 w-10 rounded-md object-cover border border-gray-200" src="{{ filter_var($item->product->gallery, FILTER_VALIDATE_URL) ? $item->product->gallery : asset($item->product->gallery) }}" alt="">
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900 max-w-[150px] truncate" title="{{ $item->product->name }}">{{ $item->product->name }} (x{{ $item->quantity }})</div>
+                                            <div class="text-xs font-semibold text-gray-700 mt-0.5">₹{{ number_format(floatval(str_replace(['₹', '$', '€', '£', ',', ' '], '', $item->product->price)) * $item->quantity, 0) }}</div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="text-sm text-red-500 italic">Product Deleted</div>
+                                @endif
+                            @empty
+                                <div class="text-sm text-gray-500 italic">No Items</div>
+                            @endforelse
                         </div>
-                    </td>
+                    </td> -->
 
                     <!-- Payment -->
                     <td class="px-6 py-4 whitespace-nowrap">

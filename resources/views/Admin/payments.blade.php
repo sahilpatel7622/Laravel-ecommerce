@@ -25,7 +25,7 @@
                 <tr>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product id</th>
+                    <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product id</th> -->
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
@@ -46,9 +46,9 @@
                     </td>
 
                     <!-- Product ID -->
-                    <td class="px-6 py-4">
+                    <!-- <td class="px-6 py-4">
                         <div class="text-sm font-medium text-gray-900">#{{ $order->product ? $order->product->id : 'N/A' }}</div>
-                    </td>
+                    </td> -->
                     
                     <!-- Amount Details -->
                     <td class="px-6 py-4">

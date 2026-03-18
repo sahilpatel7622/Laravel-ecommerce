@@ -65,26 +65,30 @@
         <div class="bg-white shadow rounded-xl p-5 border md:col-span-2">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Product Details</h2>
 
-            @if($order->product)
-                <div class="flex items-center gap-4">
-                    <img src="{{ asset($order->product->gallery) }}" 
-                         class="w-24 h-24 object-cover rounded border">
+            @forelse($order->items as $item)
+                <div class="flex items-center gap-4 mb-4 pb-4 border-b last:border-0 last:pb-0 last:mb-0">
+                    @if($item->product)
+                        <img src="{{ asset($item->product->gallery) }}" 
+                             class="w-24 h-24 object-cover rounded border">
 
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            {{ $order->product->name }}
-                        </h3>
-                        <p class="text-gray-500 text-sm mt-1">
-                            {{ $order->product->description }}
-                        </p>
-                        <p class="mt-2 font-bold text-gray-800">
-                            ₹{{ number_format($order->amount, 0) }}
-                        </p>
-                    </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                {{ $item->product->name }} (x{{ $item->quantity }})
+                            </h3>
+                            <p class="text-gray-500 text-sm mt-1">
+                                {{ Str::limit($item->product->description, 60) }}
+                            </p>
+                            <p class="mt-2 font-bold text-gray-800">
+                                ₹{{ number_format((float) str_replace(['₹', '$', '€', '£', ',', ' '], '', $item->product->price) * $item->quantity, 0) }}
+                            </p>
+                        </div>
+                    @else
+                        <p class="text-red-500 italic">Product not available (deleted)</p>
+                    @endif
                 </div>
-            @else
-                <p class="text-red-500 italic">Product not available (deleted)</p>
-            @endif
+            @empty
+                <p class="text-gray-500 italic">No products found for this order.</p>
+            @endforelse
         </div>
 
         <!-- Address -->

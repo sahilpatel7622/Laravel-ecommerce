@@ -127,16 +127,31 @@
                         <tbody>
                             @foreach ($orders as $order)
                                 <tr>
-                                    <td>
-                                        <a href="/detail/{{ $order->id }}">
-                                            <img src="{{ filter_var($order->gallery, FILTER_VALIDATE_URL) ? $order->gallery : asset($order->gallery) }}" alt="{{ $order->name }}" class="order-img">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <div class="product-name">
-                                            <a href="/detail/{{ $order->id }}" class="text-decoration-none text-dark">
-                                                {{ $order->name }}
-                                            </a>
+                                    <td colspan="2">
+                                        <div class="d-flex flex-column gap-3">
+                                            @forelse($order->items as $item)
+                                                @if($item->product)
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="/detail/{{ $item->product_id }}" class="me-3">
+                                                            <img src="{{ filter_var($item->product->gallery, FILTER_VALIDATE_URL) ? $item->product->gallery : asset($item->product->gallery) }}" alt="{{ $item->product->name }}" class="order-img" style="width: 60px; height: 60px;">
+                                                        </a>
+                                                        <div>
+                                                            <div class="product-name" style="font-size: 0.95rem;">
+                                                                <a href="/detail/{{ $item->product_id }}" class="text-decoration-none text-dark">
+                                                                    {{ $item->product->name }} <span class="text-muted">(x{{ $item->quantity }})</span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="text-primary fw-bold" style="font-size: 0.85rem;">
+                                                                ₹{{ number_format((float) str_replace(['₹', '$', '€', '£', ',', ' '], '', $item->product->price) * $item->quantity, 0) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="text-danger small">Product Deleted</div>
+                                                @endif
+                                            @empty
+                                                <div class="text-muted small">No items found</div>
+                                            @endforelse
                                         </div>
                                     </td>
                                     <td>
@@ -159,7 +174,7 @@
                                                 {{ ucfirst($order->status ?? 'Processing') }}
                                             </span>
                                             @if(strtolower($order->status) == 'pending')
-                                                <a href="/cancelorder/{{ $order->order_id }}" class="btn-cancel" onclick="return confirm('Are you sure you want to cancel this order?');">
+                                                <a href="/cancelorder/{{ $order->id }}" class="btn-cancel" onclick="return confirm('Are you sure you want to cancel this order?');">
                                                     <i class="bi bi-x me-1 fs-6"></i> Cancel
                                                 </a>
                                             @endif
@@ -167,6 +182,7 @@
                                     </td>
                                     <td class="text-center align-middle">
                                         <div class="small text-dark fw-medium">
+                                            <span class="text-primary d-block mb-1 fw-bold">#{{ $order->id }}</span>
                                             @if(isset($order->created_at))
                                                 <i class="bi bi-calendar-check me-1 text-muted"></i> {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}
                                                 <br>
@@ -175,14 +191,7 @@
                                         </div>
                                     </td>
                                     <td class="text-end align-middle">
-                                        @php
-                                            $basePrice = (float) str_replace(['₹', '$', '€', '£', ',', ' '], '', $order->price);
-                                            $tax = $basePrice * 0.005;
-                                            $delivery = $basePrice > 0 ? 99 : 0;
-                                            $discount = ($basePrice + $tax + $delivery) * 0.03;
-                                            $grandTotal = $basePrice + $tax + $delivery - $discount;
-                                        @endphp
-                                        <div class="order-price">₹{{ number_format($grandTotal) }}</div>
+                                        <div class="order-price">₹{{ number_format($order->amount, 0) }}</div>
                                     </td>
                                 </tr>
                             @endforeach

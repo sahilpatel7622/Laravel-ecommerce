@@ -31,7 +31,7 @@ class Admin extends Controller
     }
     function dashboard()
     {
-        $recentOrders = ordermodel::with('product')
+        $recentOrders = ordermodel::with('items.product')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
@@ -42,7 +42,7 @@ class Admin extends Controller
         $totalCategories = Category::count();
 
         $totalPayments = 0;
-        $allOrders = ordermodel::with('product')->get();
+        $allOrders = ordermodel::with('items.product')->get();
         foreach ($allOrders as $order) {
             if ($order->amount) {
                 $totalPayments += (float) $order->amount;
@@ -180,7 +180,7 @@ class Admin extends Controller
 
     public function orders()
     {
-        $orders = ordermodel::with(['user', 'product'])->orderBy('created_at', 'desc')->get();
+        $orders = ordermodel::with(['user', 'items.product'])->orderBy('created_at', 'desc')->get();
         return view('Admin.orders', compact('orders'));
     }
 
@@ -206,7 +206,7 @@ class Admin extends Controller
 
     public function payments()
     {
-        $orders = ordermodel::with(['user', 'product'])->orderBy('created_at', 'desc')->get();
+        $orders = ordermodel::with(['user', 'items.product'])->orderBy('created_at', 'desc')->get();
         return view('Admin.payments', compact('orders'));
     }
 
@@ -305,7 +305,7 @@ class Admin extends Controller
 
     public function view($id)
     {
-        $order = ordermodel::with(['user', 'product'])->findOrFail($id);
+        $order = ordermodel::with(['user', 'items.product'])->findOrFail($id);
         return view('Admin.view', compact('order'));
     }
 }

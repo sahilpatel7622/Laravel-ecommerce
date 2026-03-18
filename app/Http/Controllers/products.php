@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\productsmodel;
 use App\Models\cartmodel;
 use App\Models\ordermodel;
-use App\Models\Category;
 use App\Models\trendingmodel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -150,39 +149,32 @@ class products extends Controller
     {
         $userId = Auth::id();
 
+        $order = new ordermodel;
+        $order->user_id = $userId;
+        // $order->product_id = 0; // Fallback for existing database schema
+        $order->amount = round((float) str_replace(',', '', $request->input('total_amount')));
+        $order->address = $request->address . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->zip;
+        $order->payment_method = $request->payment;
+        $order->status = 'Pending';
+        $order->payment_status = (strtolower($request->payment) == 'cash') ? 'Pending' : 'Completed';
+        $order->save();
+
         if ($request->has('buy_now') && $request->input('buy_now')) {
-            $order = new ordermodel;
-            $order->user_id = $userId;
-            $order->product_id = $request->input('buy_now');
-            $order->amount = $request->input('total_amount');
-            $order->address = $request->address . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->zip;
-            $order->payment_method = $request->payment;
-            $order->status = 'Pending';
-            if (strtolower($request->payment) == 'cash') {
-                $order->payment_status = 'Pending';
-            } else {
-                $order->payment_status = 'Completed';
-            }
-            $order->save();
+            \App\Models\OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $request->input('buy_now'),
+                'quantity' => $request->input('qty', 1),
+                'price' => round((float) str_replace(',', '', $request->input('total_amount'))),
+            ]);
         } else {
             $carts = cartmodel::where('user_id', $userId)->get();
-
             foreach ($carts as $cart) {
-                $order = new ordermodel;
-                $order->user_id = $userId;
-                $order->product_id = $cart->product_id;
-                $order->amount = $request->input('total_amount');
-                $order->address = $request->address . ', ' . $request->city . ', ' . $request->state . ' - ' . $request->zip;
-                $order->payment_method = $request->payment;
-                $order->status = 'Pending';
-                if (strtolower($request->payment) == 'cash') {
-                    $order->payment_status = 'Pending';
-                } else {
-                    $order->payment_status = 'Done';
-                }
-                $order->save();
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $cart->product_id,
+                    'quantity' => $cart->quantity,
+                ]);
             }
-
             cartmodel::where('user_id', $userId)->delete();
         }
 
@@ -192,10 +184,9 @@ class products extends Controller
     function myorders()
     {
         $userId = Auth::id();
-        $orders = DB::table('orders')
-            ->join('products', 'orders.product_id', '=', 'products.id')
-            ->where('orders.user_id', $userId)
-            ->select('products.*', 'orders.id as order_id', 'orders.address', 'orders.status', 'orders.payment_method', 'orders.payment_status', 'orders.created_at')
+        $orders = ordermodel::with('items.product')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('myorders', compact('orders'));
