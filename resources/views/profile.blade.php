@@ -183,7 +183,8 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <label class="form-label" style="font-size: 13px;">GENDER</label>
-                            <select name="gender" class="form-select" style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 15px; border-radius: 8px;" required>
+                            <select name="gender" class="form-select" style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 15px; border-radius: 8px;">
+                                <!-- <option value="">Select Gender</option> -->
                                 <option value="Male" {{ Auth::user()->Gender == 'Male' ? 'selected' : '' }}>Male</option>
                                 <option value="Female" {{ Auth::user()->Gender == 'Female' ? 'selected' : '' }}>Female</option>
                                 <option value="Other" {{ Auth::user()->Gender == 'Other' ? 'selected' : '' }}>Other</option>

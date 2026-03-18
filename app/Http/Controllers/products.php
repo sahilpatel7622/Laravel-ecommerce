@@ -16,7 +16,7 @@ class products extends Controller
     public function dashboard()
     {
         $data = productsmodel::all();
-        $trending = trendingmodel::inRandomOrder()->take(8)->get();
+        $trending = trendingmodel::get();
         return view('dashboard', compact('data', 'trending'));
     }
 

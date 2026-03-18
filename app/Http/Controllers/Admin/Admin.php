@@ -138,7 +138,7 @@ class Admin extends Controller
     {
         $product = productsmodel::findOrFail($id);
         $categories = Category::all();
-        return view('Admin.edit-product', compact('product','categories'));
+        return view('Admin.edit-product', compact('product', 'categories'));
     }
 
     public function updateProduct(Request $request, $id)
@@ -178,12 +178,21 @@ class Admin extends Controller
         return redirect()->back()->with('success', 'Product deleted successfully!');
     }
 
-    public function orders()
+    public function orders(Request $request)
     {
-        $orders = ordermodel::with(['user', 'items.product'])->orderBy('created_at', 'desc')->get();
+        $query = ordermodel::with(['user', 'items.product'])
+            ->orderBy('created_at', 'desc');
+        if ($request->from_date) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+        if ($request->to_date) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $orders = $query->get();
+
         return view('Admin.orders', compact('orders'));
     }
-
     public function updateOrderStatus(Request $request, $id)
     {
         $request->validate([

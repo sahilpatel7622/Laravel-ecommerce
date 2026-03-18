@@ -44,7 +44,7 @@ class userController extends Controller
             $request->session()->regenerate();
             return redirect()->route('dashboard');
         }
-        return back()->withErrors(['email'=>'Invalid login details']);
+        return back()->withErrors(['email'=>'User Not Found']);
     }
 
     public function profile()
