@@ -190,7 +190,6 @@ class Admin extends Controller
         }
 
         $orders = $query->get();
-
         return view('Admin.orders', compact('orders'));
     }
     public function updateOrderStatus(Request $request, $id)

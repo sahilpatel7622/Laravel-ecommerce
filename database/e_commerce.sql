@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2026 at 11:07 AM
+-- Generation Time: Mar 25, 2026 at 01:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,6 +35,13 @@ CREATE TABLE `add cart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `add cart`
+--
+
+INSERT INTO `add cart` (`id`, `product_id`, `user_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(23, 2, 1, 1, '2026-03-24 05:17:06', '2026-03-24 05:17:06');
 
 -- --------------------------------------------------------
 
@@ -136,7 +143,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `amount`, `address`, `status`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
-(50, 1, '200817', '123, ahmedabad, Gujarat - 380000', 'Pending', 'upi', 'Completed', '2026-03-18 04:00:33', '2026-03-18 04:00:33'),
+(50, 1, '200817', '123, ahmedabad, Gujarat - 380000', 'Pending', 'upi', 'Completed', '2025-03-18 04:00:33', '2026-03-18 04:00:33'),
 (55, 1, '90754', '123, ahmedabad, Gujarat - 380000', 'Delivered', 'card', 'completed', '2026-03-18 04:11:17', '2026-03-18 04:17:40');
 
 -- --------------------------------------------------------
@@ -267,7 +274,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `number`, `email`, `password`, `Gender`, `created_at`, `updated_at`, `otp`) VALUES
 (1, 'Dhruvi', '6359950829', 'dhruvi@gmail.com', '$2y$10$FSnb8Y8iyzjKwqxCEzLGRO1hjNS7KgWO8pjX05VN0IPSCMCvux0K.', 'Female', '2026-02-20 11:20:38', '2026-03-12 05:05:31', NULL),
-(10, 'toto papu', '7622920577', 'sahilatel55500@gmail.com', '$2y$10$IKm3lp9NWlPAzItS83UCc.l.m7sSXo86yFBNY7tblAJcS.n7.8ffK', '', '2026-03-18 03:17:58', '2026-03-18 03:17:58', NULL);
+(12, 'Sahil', '7622920559', 'sahilpatel55500@gmail.com', '$2y$10$ZFc6FtTf1axgqo.b883DT.ylk2yh0/33is/rd65dBq8sRjTDKiT5i', 'Male', '2026-03-18 04:46:28', '2026-03-18 04:57:59', NULL);
 
 --
 -- Indexes for dumped tables
@@ -348,7 +355,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `add cart`
 --
 ALTER TABLE `add cart`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -396,13 +403,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `trending`
 --
 ALTER TABLE `trending`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
