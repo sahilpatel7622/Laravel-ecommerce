@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2026 at 01:23 PM
+-- Generation Time: Mar 26, 2026 at 07:19 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,13 +36,6 @@ CREATE TABLE `add cart` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `add cart`
---
-
-INSERT INTO `add cart` (`id`, `product_id`, `user_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(23, 2, 1, 1, '2026-03-24 05:17:06', '2026-03-24 05:17:06');
-
 -- --------------------------------------------------------
 
 --
@@ -61,7 +54,8 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `name`, `email`, `password`) VALUES
-(1, 'Dhruvi', 'dhruvi@gmail.com', '123456');
+(1, 'Dhruvi', 'dhruvi@gmail.com', '123456'),
+(2, 'Sahil', 'sahil@gmail.com', '123456');
 
 -- --------------------------------------------------------
 
@@ -246,9 +240,9 @@ CREATE TABLE `trending` (
 
 INSERT INTO `trending` (`id`, `name`, `price`, `gallery`, `created_at`, `updated_at`) VALUES
 (1, 'Redmi Note 15', '₹30,999', 'https://m.media-amazon.com/images/I/81UgjzCNSrL._SX679_.jpg', NULL, NULL),
-(2, 'Apple iPhone 16 Pro', '₹1,59,900', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', NULL, NULL),
-(7, 'Samsung', '₹80,000', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', NULL, NULL),
-(10, 'TCL TV', '₹35,000', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', NULL, NULL);
+(2, 'Apple iPhone 16 Pro', '₹1,19,900', 'https://m.media-amazon.com/images/I/619oqSJVY5L._SX679_.jpg', NULL, NULL),
+(7, 'Samsung', '₹70,000', 'https://m.media-amazon.com/images/I/81GeWU+aNGL._SX522_.jpg', NULL, NULL),
+(10, 'TCL TV', '₹32,000', 'https://m.media-amazon.com/images/I/71BXyInFv8L._SX522_.jpg', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -361,7 +355,7 @@ ALTER TABLE `add cart`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `categories`
