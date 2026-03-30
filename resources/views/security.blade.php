@@ -68,7 +68,6 @@
             border-radius: 15px;
             padding: 40px;
             min-height: 400px;
-            /* Force minimum height to match visual length */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 

@@ -10,6 +10,8 @@ use App\Models\OrderItem;
 use App\Models\trendingmodel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderPlacedMail;
 
 class products extends Controller
 {
@@ -176,6 +178,8 @@ class products extends Controller
             }
             cartmodel::where('user_id', $userId)->delete();
         }
+
+        Mail::to(Auth::user()->email)->send(new OrderPlacedMail($order));
 
         return redirect('/dashboard')->with('order_placed', 'Your order was successfully placed!');
     }
