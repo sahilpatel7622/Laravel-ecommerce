@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\products;
 use App\Http\Controllers\ForgotController;
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Admin\Admin;
 
@@ -65,6 +66,9 @@ route::post('/orderplace',[products::class,'orderplace'])->name('orderplace');
 route::get('/myorders',[products::class,'myorders'])->name('myorders');
 
 Route::get('/cancelorder/{id}',[products::class,'cancelOrder'])->name('cancelOrder');
+
+// Route::get('/checkout', [PaymentController::class, 'checkout'])->middleware('App\Http\Middleware\users');
+Route::get('/payment-success', [PaymentController::class, 'success'])->middleware('App\Http\Middleware\users');
 
 
 // Admin routes

@@ -179,6 +179,19 @@ class products extends Controller
             cartmodel::where('user_id', $userId)->delete();
         }
 
+        if (in_array(strtolower($request->payment), ['upi', 'card', 'razorpay'])) {
+            $api = new \Razorpay\Api\Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+            $razorpayOrder = $api->order->create([
+                'receipt' => (string) $order->id,
+                'amount' => $order->amount * 100,
+                'currency' => 'INR'
+            ]);
+            $order->order_id = $razorpayOrder['id'];
+            $order->save();
+
+            return view('checkout', compact('order'));
+        }
+
         Mail::to(Auth::user()->email)->send(new OrderPlacedMail($order));
 
         return redirect('/dashboard')->with('order_placed', 'Your order was successfully placed!');
